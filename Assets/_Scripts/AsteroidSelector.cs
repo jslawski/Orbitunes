@@ -15,7 +15,7 @@ public class AsteroidSelector : MonoBehaviour {
 	[HideInInspector]
 	public GameObject selectedAsteroid;
 	[HideInInspector]
-	public List<string> asteroidNames = new List<string> { "QuarterNote", "EighthNote", "SixteenthNote", "BassSixteenthNote" };
+	public List<string> asteroidNames = new List<string> { "QuarterNote", "EighthNote", "SixteenthNote", "BaseSixteenthNote" };
 
 	// Use this for initialization
 	void Awake () {
