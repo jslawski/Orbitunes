@@ -5,120 +5,72 @@ using UnityEngine;
 /* * *
  * The AsteroidGenerator class should only handle the behavior of launching an asteroid
  * as well as its accompanying trailing asteroids.  Relies on AsteroidSelector in order to determine
- * which asteroid to launch, as well as it's currently instantiated AimLine, which provides physics values
- * needed for the launch.
+ * which asteroid to launch
  * * */
 public class AsteroidGenerator : MonoBehaviour 
 {
-	public static AsteroidGenerator instance;
+	private LaunchValues launchValues;
+	private GameObject launchAsteroid;
+	private Phrase phrase;
 
-	[HideInInspector]
-	public bool queuedToLaunch = false;
-	[HideInInspector]
-	public bool buttonPressed = false;
+	private bool initialAsteroidGenerated = false;
 
-	[HideInInspector]
-	public float curScaledMagnitude = 0;
-	private float curRawMagnitude = 0;
-
-	[SerializeField]
-	private float launchVectorMaxMagnitude = 5f;
-
-	[SerializeField]
-	private float scaleFactor = 2f;
-
-	private GameObject aimLinePrefab;
-	private AimLine aimLine;
-
-	private void Awake()
+	public void SetupAsteroidGenerator(LaunchValues launchValues)
 	{
-		if (instance == null)
+		this.launchValues = launchValues;
+		this.launchAsteroid = AsteroidSelector.instance.selectedAsteroid;
+
+		Note asteroidNote = this.launchAsteroid.GetComponentInChildren<Note>();
+		this.phrase = new Phrase(asteroidNote.phraseNumber, asteroidNote.beatsPerPhrase);
+
+		Metronome.OnStep += this.LaunchAsteroid;
+	}
+
+	private void SetupAsteroid(GameObject asteroid)
+	{
+		Asteroid newAsteroid = asteroid.GetComponent<Asteroid>();
+		newAsteroid.SetupAsteroid(this.launchValues);
+	}
+
+	private void SetupNote(GameObject asteroid)
+	{
+		Note newNote = asteroid.GetComponentInChildren<Note>();
+		newNote.SetupNote(true);
+	}
+
+	private void SetupParticlePulse(GameObject asteroid)
+	{
+		ParticlePulse particlePulse = asteroid.GetComponentInChildren<ParticlePulse>();
+		Note newNote = asteroid.GetComponentInChildren<Note>();
+		particlePulse.SetupParticlePulse(newNote.beatsPerPhrase, this.phrase.currentStep);
+	}
+
+	public void LaunchAsteroid()
+	{
+		//Stop generating asteroids once the phrase is complete
+		if (this.phrase.currentStep >= (this.phrase.GetMaxStepCount() - 1))
 		{
-			instance = this;
+			Metronome.OnStep -= LaunchAsteroid;
+			Destroy(this.gameObject);
 		}
 
-		PitchManager.OnStep += this.Step;
-		this.aimLinePrefab =  Resources.Load("AimLine") as GameObject;
-	}
-
-	private void Update()
-	{
-		if (Input.GetMouseButtonDown(0))
+		if (this.phrase.ShouldPlayAtStep() == true)
 		{
-			this.InstantiateAimLine();
-		}
-	}
-		
-	public void UpdateCurrentMagnitude()
-	{
-		float launchVectorRawMagnitude = this.GetDistance(this.aimLine.startPoint, this.aimLine.endPoint);
-		this.curScaledMagnitude = (launchVectorRawMagnitude > this.launchVectorMaxMagnitude) ? this.launchVectorMaxMagnitude : launchVectorRawMagnitude; 
-		this.curRawMagnitude = this.curScaledMagnitude * this.scaleFactor; 
-	}
+			GameObject asteroidObject = GameObject.Instantiate(this.launchAsteroid, this.launchValues.startPoint, new Quaternion()) as GameObject;
+			this.SetupAsteroid(asteroidObject);
 
-	private float GetDistance(Vector2 point1, Vector2 point2)
-	{
-		return (Mathf.Sqrt(Mathf.Pow((point2.x - point1.x), 2) + Mathf.Pow((point2.y - point1.y), 2)));
-	}
+			//Only setup a note for the initial asteroid
+			if (this.initialAsteroidGenerated == false)
+			{
+				this.SetupNote(asteroidObject);
+				this.initialAsteroidGenerated = true;
+			}
 
-	private void LaunchAsteroid()
-	{
-		if (this.buttonPressed == true) 
-		{
-			this.buttonPressed = false;
-			this.queuedToLaunch = false;
-			return;
+			this.SetupParticlePulse(asteroidObject);
+
+			GameManager.instance.allAsteroids.Add(asteroidObject);
 		}
 
-		this.aimLine.initialVelocity = this.aimLine.curDirection * this.curRawMagnitude;
-
-		GameObject asteroidObject = GameObject.Instantiate(AsteroidSelector.instance.selectedAsteroid, this.aimLine.startPoint, new Quaternion()) as GameObject;
-		Asteroid newAsteroid = asteroidObject.GetComponent<Asteroid>();
-		newAsteroid.initialVelocity = this.aimLine.initialVelocity;
-		newAsteroid.instantiationPoint = this.aimLine.startPoint;
-		newAsteroid.launchDirection = this.aimLine.curDirection;
-		newAsteroid.launchMagnitude = this.curRawMagnitude;
-
-		this.queuedToLaunch = false;
-
-		GameManager.instance.allAsteroids.Add(asteroidObject);
-
-		this.StartCoroutine(this.GenerateTrailingAsteroids(newAsteroid));
-	}
-
-	private IEnumerator GenerateTrailingAsteroids(Asteroid initialAsteroid)
-	{
-		for (int i = 0; i < initialAsteroid.numTrailingAsteroids; i++) {
-			yield return new WaitForSeconds(PitchManager.instance.secondsBetweenBeats / initialAsteroid.incrementsPerBeat);
-			this.LaunchTrailingAsteroid(initialAsteroid);
-		}
-	}
-
-	private void LaunchTrailingAsteroid(Asteroid trailingAsteroid)
-	{
-		Vector2 launchVelocity = trailingAsteroid.launchDirection * trailingAsteroid.launchMagnitude;
-
-		GameObject asteroidObject = GameObject.Instantiate(AsteroidSelector.instance.selectedAsteroid, trailingAsteroid.instantiationPoint, new Quaternion()) as GameObject;
-		Asteroid newAsteroid = asteroidObject.GetComponent<Asteroid>();
-		newAsteroid.initialVelocity = launchVelocity;
-		newAsteroid.isTrailingAsteroid = true;
-
-		GameManager.instance.allAsteroids.Add(asteroidObject);
-	}
-
-	private void InstantiateAimLine()
-	{
-		Vector2 instantiationPoint = GameManager.instance.mainCamera.ScreenToWorldPoint(Input.mousePosition);
-		GameObject currentAimLine = Instantiate(this.aimLinePrefab, instantiationPoint, new Quaternion()) as GameObject;
-		this.aimLine = currentAimLine.GetComponent<AimLine>();
-		this.aimLine.SetupAimLine();
-	}
-
-	private void Step()
-	{
-		if (this.queuedToLaunch == true) 
-		{
-			this.LaunchAsteroid();
-		}
+		this.phrase.IncrementStep();
 	}
 }

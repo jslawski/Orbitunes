@@ -42,7 +42,7 @@ public class AsteroidSelector : MonoBehaviour {
 
 	private void SelectAsteroid(string selectedAsteroidName)
 	{
-		AsteroidGenerator.instance.buttonPressed = true;
+		AimManager.instance.buttonPressed = true;
 		this.selectedAsteroid = Resources.Load("Asteroids/" + selectedAsteroidName) as GameObject;
 	}
 }

@@ -27,12 +27,11 @@ public class MenuManager : MonoBehaviour {
 		StartCoroutine(this.DisplayTitle());
 	}
 	
-
 	private IEnumerator DisplayTitle()
 	{
 		PitchManager.instance.bassSound.volume = 0;
 
-		StartCoroutine(PitchManager.instance.StartMetronome());
+		StartCoroutine(Metronome.StartMetronome());
 		StartCoroutine(PitchManager.instance.StartBass());
 
 		for (float i = 0; i < this.fadeInThreshold; i += Time.fixedDeltaTime / this.fadeDuration) 

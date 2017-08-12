@@ -1,21 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//TODO: Fix particle pulses for asteroids.  Currently they don't play for the main asteroid, and only play once for each trailing asteroid.
-
 /* * * 
- * The Note class handles all non-physics-based aspects of an asteroid
- * including audio and particle effects
+ * The Note class handles the behavior of any object that emits sound to the beat of the Metronome.  
+ * If the note is static, it will always play the same pitch.
+ * If the note is dynamic, it will change it's pitch depending on its distance from the center
  *  *  */
 public class Note : MonoBehaviour {
 	public string noteName;
 
-	[SerializeField]
-	private Asteroid asteroid;
-	[SerializeField]
-	private ParticleSystem particles;
-	public Color particleColor;
+	private float curDistanceFromStar = 0f;
+	private float maxDistanceFromStar = 12f;
+
 	public AudioSource noteAudio;
 
 	[HideInInspector]
@@ -23,44 +21,79 @@ public class Note : MonoBehaviour {
 
 	private int audioSourceMasterDictKey = 1;
 
-	public void Start()
+	private Phrase notePhrase;
+
+	//A phrase number is a 16-bit number where each bit represents a "beat" in the phrase.
+	//1 represents a note played, 0 represents a rest.
+	public ushort phraseNumber = 0;
+
+	//How many measures are in a single phrase of the note.
+	public int beatsPerPhrase = 0;
+
+	public void SetupNote(bool isDynamic)
 	{
-		ParticleSystem.MainModule mainSettings = this.particles.main;
-		mainSettings.startColor = new ParticleSystem.MinMaxGradient(this.particleColor);
+		notePhrase = new Phrase(this.phraseNumber, this.beatsPerPhrase);
 
-
-		StartCoroutine(this.Pulse());
-
-		//Don't play a note if the asteroid is a trailing asteroid
-		if (this.asteroid.isTrailingAsteroid == false)
+		if (isDynamic == true)
 		{
-			StartCoroutine(PitchManager.instance.PlayToBeat(this, asteroid.incrementsPerBeat));
-
-			this.audioSourceMasterDictKey = PitchManager.instance.dictionaryIndex;
-			PitchManager.instance.AddAudioSource(this.noteAudio);
+			Metronome.OnStep += this.PlayDynamicNote;
+			this.PlayDynamicNote();
 		}
+		else
+		{
+			Metronome.OnStep += this.PlayStaticNote;
+			this.PlayStaticNote();
+		}
+
+		this.audioSourceMasterDictKey = PitchManager.instance.dictionaryIndex;
+		PitchManager.instance.AddAudioSource(this.noteAudio);
 	}
 
-	void OnDestroy()
+	private void OnDestroy()
 	{
+		Metronome.OnStep -= this.PlayDynamicNote;
+		Metronome.OnStep -= this.PlayStaticNote;
+
 		PitchManager.instance.audioSourceMasterDict.Remove(this.audioSourceMasterDictKey);
 	}
 
-	public void GetCurrentPitchIndex()
+	public float GetDistance(Vector2 point1, Vector2 point2)
 	{
-		this.curPitchIndex = Mathf.RoundToInt((this.asteroid.curDistanceFromStar / this.asteroid.maxDistanceFromStar) * (PitchManager.notesInScale - 1));
+		return (Mathf.Sqrt(Mathf.Pow((point2.x - point1.x), 2) + Mathf.Pow((point2.y - point1.y), 2)));
+	}
+
+	private void GetCurrentPitchIndex()
+	{
+		this.curDistanceFromStar = this.GetDistance(Vector2.zero, this.transform.position);
+
+		this.curPitchIndex = Mathf.RoundToInt((this.curDistanceFromStar / this.maxDistanceFromStar) * (PitchManager.notesInScale - 1));
 		if (this.curPitchIndex > PitchManager.notesInScale - 1) 
 		{
 			this.curPitchIndex = PitchManager.notesInScale - 1;
 		}
 	}
 
-	public IEnumerator Pulse()
+	//Pitch changes depending on distance to the star
+	private void PlayDynamicNote()
 	{
-		while (true) {
-			particles.Play();
-
-			yield return new WaitForSeconds(PitchManager.instance.secondsBetweenBeats);
+		if (this.notePhrase.ShouldPlayAtStep() == true)
+		{
+			this.GetCurrentPitchIndex();
+			this.noteAudio.pitch = PitchManager.instance.cMajorScale[this.curPitchIndex];
+			this.noteAudio.PlayScheduled(Metronome.nextBeatTime);
 		}
+
+		this.notePhrase.IncrementStep();
+	}
+
+	//Pitch is static throughout its lifecycle
+	private void PlayStaticNote()
+	{
+		if (this.notePhrase.ShouldPlayAtStep() == true)
+		{
+			this.noteAudio.PlayScheduled(Metronome.nextBeatTime);
+		}
+
+		this.notePhrase.IncrementStep();
 	}
 }

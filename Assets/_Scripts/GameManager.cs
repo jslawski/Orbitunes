@@ -38,11 +38,19 @@ public class GameManager : MonoBehaviour {
 
 	private void DestroyAllAsteroids()
 	{
-		AsteroidGenerator.instance.buttonPressed = true;
+		AimManager.instance.buttonPressed = true;
 
 		foreach (GameObject asteroid in this.allAsteroids) 
 		{
 			Destroy(asteroid);
 		}
 	}
+}
+
+public struct LaunchValues
+{
+	public Vector2 startPoint;
+	public Vector2 endPoint;
+	public Vector2 curDirection;
+	public float rawMagnitude;
 }

@@ -4,57 +4,73 @@ using UnityEngine;
 
 /* * *
  * The AimLine class handles the behavior of the line that is seen when the player clicks and drags the mouse
- * across the screen.  As the line updates every frame, it also updates the physics variables used by the AsteroidGenerator class
+ * across the screen.  This class contains all of the initial values that the AsteroidGenerator needs to launch asteroids
  * * */
 public class AimLine : MonoBehaviour {
 
+	[Header("Change these values to determine how much force will launch the asteroids")]
+	[SerializeField]
+	private float launchVectorMaxMagnitude = 5f;
+	[SerializeField]
+	private float scaleFactor = 2f;
+
+	public delegate void AimLineReleased(LaunchValues launchValues);
+	public event AimLineReleased OnAimLineReleased;
+
+	private float curScaledMagnitude = 0;
+
 	private LineRenderer aimLineRenderer;
 
-	[HideInInspector]
-	public Vector2 startPoint = Vector2.zero;
-	[HideInInspector]
-	public Vector2 endPoint = Vector2.zero;
-	[HideInInspector]
-	public Vector2 curDirection = Vector2.zero;
-	[HideInInspector]
-	public Vector2 initialVelocity = Vector2.zero;
+	private LaunchValues aimLineLaunchValues;
+
+	public void SetupAimLine()
+	{
+		this.aimLineLaunchValues.startPoint = GameManager.instance.mainCamera.ScreenToWorldPoint(Input.mousePosition);
+		this.SetupAimLineRenderer();
+		this.aimLineLaunchValues.endPoint = this.aimLineLaunchValues.startPoint;
+
+		StartCoroutine(this.UpdateDirection());
+	}
 
 	private void SetupAimLineRenderer()
 	{
 		this.aimLineRenderer = gameObject.GetComponentInChildren<LineRenderer>();
-		this.aimLineRenderer.SetPosition(0, this.startPoint);
-		this.aimLineRenderer.SetPosition(0, this.startPoint);
+		this.aimLineRenderer.SetPosition(0, this.aimLineLaunchValues.startPoint);
+		this.aimLineRenderer.SetPosition(0, this.aimLineLaunchValues.startPoint);
 
-		Color lineColor = AsteroidSelector.instance.selectedAsteroid.GetComponentInChildren<Note>().particleColor;
+		Color lineColor = AsteroidSelector.instance.selectedAsteroid.GetComponentInChildren<ParticlePulse>().particleColor;
 		this.aimLineRenderer.startColor = lineColor;
 		this.aimLineRenderer.endColor = lineColor;
 	}
 
-	public void SetupAimLine()
+	private float GetDistance(Vector2 point1, Vector2 point2)
 	{
-		this.startPoint = GameManager.instance.mainCamera.ScreenToWorldPoint(Input.mousePosition);
-		this.SetupAimLineRenderer();
-		this.endPoint = this.startPoint;
+		return (Mathf.Sqrt(Mathf.Pow((point2.x - point1.x), 2) + Mathf.Pow((point2.y - point1.y), 2)));
+	}
 
-		StartCoroutine(this.UpdateDirection());
+	private void UpdateCurrentMagnitude()
+	{
+		float launchVectorRawMagnitude = this.GetDistance(this.aimLineLaunchValues.startPoint, this.aimLineLaunchValues.endPoint);
+		this.curScaledMagnitude = (launchVectorRawMagnitude > this.launchVectorMaxMagnitude) ? this.launchVectorMaxMagnitude : launchVectorRawMagnitude; 
+		this.aimLineLaunchValues.rawMagnitude = this.curScaledMagnitude * this.scaleFactor; 
 	}
 
 	private IEnumerator UpdateDirection()
 	{	
 		while (Input.GetMouseButton(0))
 		{
-			this.endPoint = GameManager.instance.mainCamera.ScreenToWorldPoint(Input.mousePosition);
-			this.curDirection = (this.endPoint - this.startPoint).normalized;
+			this.aimLineLaunchValues.endPoint = GameManager.instance.mainCamera.ScreenToWorldPoint(Input.mousePosition);
+			this.aimLineLaunchValues.curDirection = (this.aimLineLaunchValues.endPoint - this.aimLineLaunchValues.startPoint).normalized;
 
-			Vector2 lineRendererEndPoint = this.startPoint + (this.curDirection * AsteroidGenerator.instance.curScaledMagnitude);
+			Vector2 lineRendererEndPoint = this.aimLineLaunchValues.startPoint + (this.aimLineLaunchValues.curDirection * this.curScaledMagnitude);
 			this.aimLineRenderer.SetPosition(1, lineRendererEndPoint);
 
-			AsteroidGenerator.instance.UpdateCurrentMagnitude();
+			this.UpdateCurrentMagnitude();
 
 			yield return null;
 		}
 
-		AsteroidGenerator.instance.queuedToLaunch = true;
+		this.OnAimLineReleased(this.aimLineLaunchValues);
 		Destroy(this.gameObject);
 	}
 }
