@@ -2,7 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/* * *
+ * The PitchManager handles everything related to managing the pitch and volumes of every audio source in the game
+ * * */
 public class PitchManager : MonoBehaviour {
 
 	public static PitchManager instance;
@@ -13,22 +15,25 @@ public class PitchManager : MonoBehaviour {
 
 	public List<float> cMajorScale;
 
-	public int dictionaryIndex = 0;
-	public Dictionary<int, AudioSource> audioSourceMasterDict;
+	public List<AudioSource> audioSourceMasterList;
 
-	public AudioSource bassSound;
+	//Volume fields
+	private float focusVolumePercent = 0.1f;		//Percent of "total volume" the focused notes will take up
+	private int numFocusedNotes = 1;				//Number of most recent notes that will be played at a higher volume
+
+	[SerializeField]
+	private Note bassNote;
 
 	// Use this for initialization
 	void Awake () {
 		PitchManager.instance = this;
 		this.cMajorScale = new List<float>();
-		this.audioSourceMasterDict = new Dictionary<int, AudioSource>();
 
-		this.AddAudioSource(this.bassSound);
+		this.audioSourceMasterList = new List<AudioSource>();
 
 		this.CreateCMajorScale();
 
-		Restart.OnRestartButtonClicked += this.ResetBass;
+		bassNote.SetupNote(false);
 	}
 
 	private void CreateCMajorScale()
@@ -53,42 +58,42 @@ public class PitchManager : MonoBehaviour {
 		PitchManager.notesInScale = cMajorScale.Count;
 	}
 
-	private void ResetBass()
-	{
-		this.bassSound.volume = 1f;
-	}
-
-	public IEnumerator StartBass()
-	{
-		double nextBeatTime = AudioSettings.dspTime;
-
-		while (true)
-		{
-			double curTime = AudioSettings.dspTime;
-			if (curTime > nextBeatTime)
-			{
-				this.bassSound.PlayScheduled(nextBeatTime);
-				nextBeatTime += Metronome.secondsBetweenBeats;
-			}
-
-			yield return null;
-		}
-	}
-
 	public void AddAudioSource(AudioSource source)
 	{
-		this.audioSourceMasterDict.Add(this.dictionaryIndex, source);
-		this.dictionaryIndex++;
+		this.audioSourceMasterList.Add(source);
+
+		this.NormalizeVolumes();
+	}
+
+	public void RemoveAudioSource(AudioSource source)
+	{
+		this.audioSourceMasterList.Remove(source);
+
 		this.NormalizeVolumes();
 	}
 
 	private void NormalizeVolumes()
 	{
-		float normalizedVolume = 1.0f / (float)this.audioSourceMasterDict.Count;
+		float baseNormalizedVolume = 1.0f / (float)this.audioSourceMasterList.Count;
+		float normalizedVolumeBumpPerFocusNote = (baseNormalizedVolume * this.focusVolumePercent) / (float)this.numFocusedNotes;
+		float focusVolume = baseNormalizedVolume + normalizedVolumeBumpPerFocusNote;
+		float unfocusedVolume = baseNormalizedVolume - normalizedVolumeBumpPerFocusNote;
 
-		foreach (KeyValuePair<int, AudioSource> entry in this.audioSourceMasterDict) 
+		foreach (AudioSource source in this.audioSourceMasterList) 
 		{
-			entry.Value.volume = normalizedVolume;
+			//Use baseNormalizedVolume if notes don't need to be focused yet
+			if (this.audioSourceMasterList.Count < this.numFocusedNotes)
+			{
+				source.volume = baseNormalizedVolume;
+			}
+			else if (this.audioSourceMasterList.IndexOf(source) >= (this.audioSourceMasterList.Count - this.numFocusedNotes - 1))
+			{
+				source.volume = focusVolume;
+			}
+			else
+			{
+				source.volume = unfocusedVolume;
+			}
 		}
 	}
 }

@@ -1,7 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/* * *
+ * ParticlePulse handles the pulse particle effect for each individual asteroid.
+ * Each asteroid requires its on ParticlePulse class in order to ensure that the pulse
+ * only happens on the specific step in the beat that the asteroid was created on.
+ * * */
 public class ParticlePulse : MonoBehaviour {
 
 	Phrase phrase;

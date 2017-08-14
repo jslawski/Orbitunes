@@ -1,7 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/* * *
+ * The Phrase class contains all of the data and logic necessary to create custom beats
+ * A phrase consists of a 4 to 16-bit set of binary, with 1s denoting a note, and 0s denoting a rest
+ * Looping through the binary set replicates a looping beat.
+ * * */
 public class Phrase {
 	private ushort phraseNumber;	//16-bit number representing when notes should be played at each step. 1 = play note, 0 = rest
 	private ushort phraseMask;		//Used to determine if a note should be played at a given beat in the phrase

@@ -18,9 +18,11 @@ public class Asteroid : MonoBehaviour {
 	{
 		Vector2 initialVelocity = launchValues.curDirection * launchValues.rawMagnitude;
 		this.rigidBody.velocity = initialVelocity;
+
+		Restart.OnRestartButtonClicked += this.DestroyAsteroid;
 	}
 
-	void FixedUpdate () {
+	private void FixedUpdate () {
 		this.radius = Vector3.Magnitude(this.transform.position);
 		this.gravitationalForce = -(CenterStar.mass) / (Mathf.Pow(this.radius, 2.0f));
 		this.appliedForce = (this.transform.position).normalized * this.gravitationalForce;
@@ -36,5 +38,15 @@ public class Asteroid : MonoBehaviour {
 	{
 		Vector3 viewportPosition = GameManager.instance.mainCamera.WorldToViewportPoint(this.gameObject.transform.position);
 		return ((viewportPosition.x > 0) && (viewportPosition.x < 1) && (viewportPosition.y > 0) && (viewportPosition.y < 1));
+	}
+
+	private void OnDestroy()
+	{
+		Restart.OnRestartButtonClicked -= this.DestroyAsteroid;
+	}
+
+	private void DestroyAsteroid()
+	{
+		Destroy(this.gameObject);
 	}
 }

@@ -29,11 +29,6 @@ public class MenuManager : MonoBehaviour {
 	
 	private IEnumerator DisplayTitle()
 	{
-		PitchManager.instance.bassSound.volume = 0;
-
-		StartCoroutine(Metronome.StartMetronome());
-		StartCoroutine(PitchManager.instance.StartBass());
-
 		for (float i = 0; i < this.fadeInThreshold; i += Time.fixedDeltaTime / this.fadeDuration) 
 		{
 			if (Input.GetMouseButtonDown(0)) 
@@ -46,11 +41,11 @@ public class MenuManager : MonoBehaviour {
 
 			yield return new WaitForFixedUpdate();
 		}
-
-		PitchManager.instance.bassSound.volume = 1f;;
-
+			
 		title.color = new Color(title.color.r, title.color.g, title.color.b, 1);
 		myName.color = new Color(myName.color.r, myName.color.g, myName.color.b, 1);
+
+		StartCoroutine(Metronome.StartMetronome());
 
 		yield return new WaitForFixedUpdate();
 

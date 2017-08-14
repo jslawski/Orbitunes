@@ -19,8 +19,6 @@ public class Note : MonoBehaviour {
 	[HideInInspector]
 	public int curPitchIndex = 0;
 
-	private int audioSourceMasterDictKey = 1;
-
 	private Phrase notePhrase;
 
 	//A phrase number is a 16-bit number where each bit represents a "beat" in the phrase.
@@ -45,7 +43,6 @@ public class Note : MonoBehaviour {
 			this.PlayStaticNote();
 		}
 
-		this.audioSourceMasterDictKey = PitchManager.instance.dictionaryIndex;
 		PitchManager.instance.AddAudioSource(this.noteAudio);
 	}
 
@@ -54,7 +51,7 @@ public class Note : MonoBehaviour {
 		Metronome.OnStep -= this.PlayDynamicNote;
 		Metronome.OnStep -= this.PlayStaticNote;
 
-		PitchManager.instance.audioSourceMasterDict.Remove(this.audioSourceMasterDictKey);
+		PitchManager.instance.RemoveAudioSource(this.noteAudio);
 	}
 
 	public float GetDistance(Vector2 point1, Vector2 point2)
@@ -76,6 +73,11 @@ public class Note : MonoBehaviour {
 	//Pitch changes depending on distance to the star
 	private void PlayDynamicNote()
 	{
+		if (Metronome.metronomeStarted == false)
+		{
+			return;
+		}
+
 		if (this.notePhrase.ShouldPlayAtStep() == true)
 		{
 			this.GetCurrentPitchIndex();
@@ -89,6 +91,11 @@ public class Note : MonoBehaviour {
 	//Pitch is static throughout its lifecycle
 	private void PlayStaticNote()
 	{
+		if (Metronome.metronomeStarted == false)
+		{
+			return;
+		}
+
 		if (this.notePhrase.ShouldPlayAtStep() == true)
 		{
 			this.noteAudio.PlayScheduled(Metronome.nextBeatTime);

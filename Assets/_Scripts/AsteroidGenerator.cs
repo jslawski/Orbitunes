@@ -24,6 +24,13 @@ public class AsteroidGenerator : MonoBehaviour
 		this.phrase = new Phrase(asteroidNote.phraseNumber, asteroidNote.beatsPerPhrase);
 
 		Metronome.OnStep += this.LaunchAsteroid;
+		Restart.OnRestartButtonClicked += this.DestroyAsteroidGenerator;
+	}
+
+	private void OnDestroy()
+	{
+		Metronome.OnStep -= this.LaunchAsteroid;
+		Restart.OnRestartButtonClicked -= this.DestroyAsteroidGenerator;
 	}
 
 	private void SetupAsteroid(GameObject asteroid)
@@ -43,6 +50,11 @@ public class AsteroidGenerator : MonoBehaviour
 		ParticlePulse particlePulse = asteroid.GetComponentInChildren<ParticlePulse>();
 		Note newNote = asteroid.GetComponentInChildren<Note>();
 		particlePulse.SetupParticlePulse(newNote.beatsPerPhrase, this.phrase.currentStep);
+	}
+
+	private void DestroyAsteroidGenerator()
+	{
+		Destroy(this.gameObject);
 	}
 
 	public void LaunchAsteroid()
@@ -67,8 +79,6 @@ public class AsteroidGenerator : MonoBehaviour
 			}
 
 			this.SetupParticlePulse(asteroidObject);
-
-			GameManager.instance.allAsteroids.Add(asteroidObject);
 		}
 
 		this.phrase.IncrementStep();

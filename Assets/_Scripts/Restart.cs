@@ -9,6 +9,7 @@ public class Restart : MonoBehaviour {
 
 	void OnMouseDown()
 	{
+		AimManager.instance.buttonPressed = true;
 		Restart.OnRestartButtonClicked();
 	}
 }
