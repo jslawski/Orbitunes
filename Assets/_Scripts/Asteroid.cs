@@ -19,7 +19,7 @@ public class Asteroid : MonoBehaviour {
 		Vector2 initialVelocity = launchValues.curDirection * launchValues.rawMagnitude;
 		this.rigidBody.velocity = initialVelocity;
 
-		Restart.OnRestartButtonClicked += this.DestroyAsteroid;
+		GameManager.OnRestartButtonClicked += this.DestroyAsteroid;
 	}
 
 	private void FixedUpdate () {
@@ -42,7 +42,7 @@ public class Asteroid : MonoBehaviour {
 
 	private void OnDestroy()
 	{
-		Restart.OnRestartButtonClicked -= this.DestroyAsteroid;
+		GameManager.OnRestartButtonClicked -= this.DestroyAsteroid;
 	}
 
 	private void DestroyAsteroid()

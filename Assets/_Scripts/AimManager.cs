@@ -1,19 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-//TODO: Account for hitting buttons.  Don't instantiate an aim line then.
-
-public class AimManager : MonoBehaviour {
+public class AimManager : MonoBehaviour, IPointerDownHandler 
+{
 
 	public static AimManager instance;
+
+	public delegate void LaunchAreaClicked();
+	public static event LaunchAreaClicked OnLaunchAreaClicked;
 
 	private GameObject aimLinePrefab;
 	private GameObject asteroidGeneratorPrefab;
 	private AimLine aimLine;
-
-	[HideInInspector]
-	public bool buttonPressed = false;  //TODO: Change this when we implement a new menu system
 
 	private void Awake()
 	{
@@ -29,22 +29,14 @@ public class AimManager : MonoBehaviour {
 		this.asteroidGeneratorPrefab = Resources.Load("AsteroidGenerator") as GameObject;
 	}
 
-	private void Update()
+	public void OnPointerDown(PointerEventData data)
 	{
-		if (Input.GetMouseButtonDown(0))
-		{
-			this.InstantiateAimLine();
-		}
+		AimManager.OnLaunchAreaClicked();
+		this.InstantiateAimLine();
 	}
 
 	private void InstantiateAimLine()
 	{
-		if (this.buttonPressed == true)
-		{
-			this.buttonPressed = false;
-			return;
-		}
-
 		Vector2 instantiationPoint = GameManager.instance.mainCamera.ScreenToWorldPoint(Input.mousePosition);
 		GameObject currentAimLine = Instantiate(this.aimLinePrefab, instantiationPoint, new Quaternion()) as GameObject;
 		this.aimLine = currentAimLine.GetComponent<AimLine>();

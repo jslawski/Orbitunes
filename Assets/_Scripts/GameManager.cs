@@ -6,6 +6,9 @@ public class GameManager : MonoBehaviour {
 
 	public static GameManager instance;
 
+	public delegate void RestartButtonClicked();
+	public static event RestartButtonClicked OnRestartButtonClicked;
+
 	[SerializeField]
 	public Camera mainCamera;
 
@@ -15,6 +18,8 @@ public class GameManager : MonoBehaviour {
 		{
 			instance = this;
 		}
+
+		AsteroidSelector.SetupAsteroidSelector();
 	}
 
 	void Update() 
@@ -27,6 +32,14 @@ public class GameManager : MonoBehaviour {
 		if (Input.GetKey(KeyCode.Escape)) 
 		{
 			Application.Quit();
+		}
+	}
+
+	public void RestartGame()
+	{
+		if (GameManager.OnRestartButtonClicked != null)
+		{
+			GameManager.OnRestartButtonClicked();
 		}
 	}
 }

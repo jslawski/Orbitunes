@@ -18,19 +18,19 @@ public class AsteroidGenerator : MonoBehaviour
 	public void SetupAsteroidGenerator(LaunchValues launchValues)
 	{
 		this.launchValues = launchValues;
-		this.launchAsteroid = AsteroidSelector.instance.selectedAsteroid;
+		this.launchAsteroid = AsteroidSelector.selectedAsteroid;
 
 		Note asteroidNote = this.launchAsteroid.GetComponentInChildren<Note>();
 		this.phrase = new Phrase(asteroidNote.phraseNumber, asteroidNote.beatsPerPhrase);
 
 		Metronome.OnStep += this.LaunchAsteroid;
-		Restart.OnRestartButtonClicked += this.DestroyAsteroidGenerator;
+		GameManager.OnRestartButtonClicked += this.DestroyAsteroidGenerator;
 	}
 
 	private void OnDestroy()
 	{
 		Metronome.OnStep -= this.LaunchAsteroid;
-		Restart.OnRestartButtonClicked -= this.DestroyAsteroidGenerator;
+		GameManager.OnRestartButtonClicked -= this.DestroyAsteroidGenerator;
 	}
 
 	private void SetupAsteroid(GameObject asteroid)

@@ -4,45 +4,40 @@ using UnityEngine;
 
 /* * *
  * The AsteroidSelector class handles the management of which asteroid is currently selected.
- * AsteroidGenerator uses this class to determine which asteroid will be fired next.
+ * AsteroidGenerator uses AsteroidSelector class to determine which asteroid will be fired next.
  * * */
-public class AsteroidSelector : MonoBehaviour {
+public static class AsteroidSelector {
 
-	public static AsteroidSelector instance;
+	public static Dictionary<string, GameObject> asteroidMasterDict;
 
-	public Dictionary<string, GameObject> asteroidMasterDict;
+	public delegate void AsteroidSelected(string selectedAsteroidName);
+	public static event AsteroidSelected OnAsteroidSelected;
 
 	[HideInInspector]
-	public GameObject selectedAsteroid;
+	public static GameObject selectedAsteroid;
 	[HideInInspector]
-	public List<string> asteroidNames = new List<string> { "QuarterNote", "EighthNote", "SixteenthNote", "BassSixteenthNote" };
+	public static List<string> asteroidNames = new List<string> { "QuarterNote", "EighthNote", "SixteenthNote", "BassSixteenthNote" };
 
-	// Use this for initialization
-	void Awake () {
-		if (instance == null)
-		{
-			instance = this;
-		}
-
-		this.LoadAsteroidMasterDict();
-		NoteButton.OnNoteSelected += this.SelectAsteroid;
-		this.selectedAsteroid = this.asteroidMasterDict["QuarterNote"];
+	// Use AsteroidSelector for initialization
+	public static void SetupAsteroidSelector () {
+		AsteroidSelector.LoadAsteroidMasterDict();
+		AsteroidSelector.selectedAsteroid = AsteroidSelector.asteroidMasterDict["QuarterNote"];
 	}
 
-	private void LoadAsteroidMasterDict()
+	private static void LoadAsteroidMasterDict()
 	{
-		this.asteroidMasterDict = new Dictionary<string, GameObject>();
+		AsteroidSelector.asteroidMasterDict = new Dictionary<string, GameObject>();
 
-		foreach (string asteroidName in this.asteroidNames)
+		foreach (string asteroidName in AsteroidSelector.asteroidNames)
 		{
 			GameObject asteroidPrefab = Resources.Load("Asteroids/" + asteroidName) as GameObject;
-			this.asteroidMasterDict.Add(asteroidName, asteroidPrefab);
+			AsteroidSelector.asteroidMasterDict.Add(asteroidName, asteroidPrefab);
 		}
 	}
 
-	private void SelectAsteroid(string selectedAsteroidName)
+	public static void SelectAsteroid(string selectedAsteroidName)
 	{
-		AimManager.instance.buttonPressed = true;
-		this.selectedAsteroid = Resources.Load("Asteroids/" + selectedAsteroidName) as GameObject;
+		AsteroidSelector.selectedAsteroid = Resources.Load("Asteroids/" + selectedAsteroidName) as GameObject;
+		AsteroidSelector.OnAsteroidSelected(selectedAsteroidName);
 	}
 }

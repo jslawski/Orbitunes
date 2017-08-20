@@ -1,19 +1,34 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class NoteButton : MonoBehaviour {
-
-	public delegate void NoteButtonClicked(string asteroidName);
-	public static event NoteButtonClicked OnNoteSelected;
-
 	public string asteroidName = string.Empty;
-	public SpriteRenderer sprite;
-	public Color selectedColor;
 
-	void OnMouseDown()
+	private Image buttonImage;
+
+	private void Start()
 	{
-		this.sprite.color = this.selectedColor;
-		NoteButton.OnNoteSelected(asteroidName);
+		this.buttonImage = this.gameObject.GetComponent<Image>();
+		AsteroidSelector.OnAsteroidSelected += ChangeButtonColor;
+	}
+
+	public void SelectButton()
+	{
+		AsteroidSelector.SelectAsteroid(asteroidName);
+	}
+
+	private void ChangeButtonColor(string selectedAsteroidName)
+	{
+		if (selectedAsteroidName == this.asteroidName)
+		{
+			Color buttonColor = AsteroidSelector.selectedAsteroid.GetComponentInChildren<ParticlePulse>().particleColor;
+			this.buttonImage.color = buttonColor;
+		}
+		else
+		{
+			this.buttonImage.color = Color.white;
+		}
 	}
 }
