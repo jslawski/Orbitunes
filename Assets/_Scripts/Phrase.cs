@@ -7,15 +7,11 @@ using UnityEngine;
  * Looping through the binary set replicates a looping beat.
  * * */
 public class Phrase {
-	private ushort phraseNumber;	//16-bit number representing when notes should be played at each step. 1 = play note, 0 = rest
 	private ushort phraseMask;		//Used to determine if a note should be played at a given beat in the phrase
+	public static ushort maxPhraseMask = 32768; 	//Decimal representation of 1000000000000000
 
-	private ushort maxPhraseMask1 = 8;		//Decimal representation of 0000000000001000
-	private ushort maxPhraseMask2 = 128;	//Decimal representation of 0000000010000000
-	private ushort maxPhraseMask3 = 2048;	//Decimal representation of 0000100000000000
-	private ushort maxPhraseMask4 = 32768; 	//Decimal representation of 1000000000000000
-
-	private int beatsPerPhrase;
+	public ushort phraseNumber;	//16-bit number representing when notes should be played at each step. 1 = play note, 0 = rest
+	public int beatsPerPhrase;
 	public int currentStep = 0;	//Used to determine the current step in the phrase
 
 	#region Constructors
@@ -23,46 +19,16 @@ public class Phrase {
 	{
 		this.phraseNumber = phraseNumber;
 		this.beatsPerPhrase = beatsPerPhrase;
-		this.phraseMask = this.GetBasePhraseMask(this.beatsPerPhrase);
-
-		if (this.phraseMask == 0)
-		{
-			Debug.LogError("Error: Number of beats per phrase invalid.  Unable to play note.");
-			return;
-		}
+		this.phraseMask = Phrase.maxPhraseMask;
 	}
 
 	public Phrase(int beatsPerPhrase)
 	{
 		this.beatsPerPhrase = beatsPerPhrase;
-		this.phraseMask = this.GetBasePhraseMask(this.beatsPerPhrase);
+		this.phraseMask = Phrase.maxPhraseMask;
 		this.phraseNumber = this.phraseMask;
-
-		if (this.phraseMask == 0)
-		{
-			Debug.LogError("Error: Number of beats per phrase invalid.  Unable to play note.");
-			return;
-		}
 	}
 	#endregion
-
-	private ushort GetBasePhraseMask(int beatsPerPhrase)
-	{
-		switch (beatsPerPhrase)
-		{
-		case 1:
-			return this.maxPhraseMask1;
-		case 2:
-			return this.maxPhraseMask2;
-		case 3:
-			return this.maxPhraseMask3;
-		case 4:
-			return this.maxPhraseMask4;
-		default:
-			Debug.LogError("Error: Invalid number of beats per phrase");
-			return 0;
-		};
-	}
 
 	public static ushort GetPhraseMaskAtStep(int step, int beatsPerPhrase)
 	{
@@ -77,7 +43,7 @@ public class Phrase {
 
 	private void ResetPhrase()
 	{
-		this.phraseMask = this.GetBasePhraseMask(this.beatsPerPhrase);
+		this.phraseMask = Phrase.maxPhraseMask;
 		this.currentStep = 0;
 	}
 

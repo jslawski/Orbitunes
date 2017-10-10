@@ -12,6 +12,9 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	public Camera mainCamera;
 
+	[SerializeField]
+	private AsteroidCreator asteroidCreator;
+
 	// Use this for initialization
 	void Awake () {
 		if (instance == null)
@@ -41,6 +44,12 @@ public class GameManager : MonoBehaviour {
 		{
 			GameManager.OnRestartButtonClicked();
 		}
+	}
+
+	public void OpenAsteroidCreator(GameObject asteroidToEdit)
+	{
+		this.asteroidCreator.gameObject.SetActive(true);
+		this.asteroidCreator.SetupAsteroidCreator(asteroidToEdit);
 	}
 }
 

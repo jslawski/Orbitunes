@@ -14,6 +14,11 @@ public class ParticlePulse : MonoBehaviour {
 	private ParticleSystem particles;
 	public Color particleColor;
 
+	public ParticlePulse(Color particleColor)
+	{
+		this.particleColor = particleColor;
+	}
+
 	public void SetupParticlePulse(int beatsPerPhrase, int startStep)
 	{
 		//The pulse phrase consists of ONE step (bit) that the particle effect is supposed to play on for the phrase
