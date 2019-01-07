@@ -36,6 +36,7 @@ public class AsteroidGenerator : MonoBehaviour
 	private void SetupAsteroid(GameObject asteroid)
 	{
 		Asteroid newAsteroid = asteroid.GetComponent<Asteroid>();
+		newAsteroid.isStationary = false;
 		newAsteroid.SetupAsteroid(this.launchValues);
 	}
 

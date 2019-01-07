@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEditor;
 
 public class AsteroidCreator : MonoBehaviour {
 
@@ -41,6 +40,11 @@ public class AsteroidCreator : MonoBehaviour {
 	{
 		//Always create a new one on awake
 		AsteroidCreator.instance = this;
+	}
+
+	private void Start()
+	{
+		AimManager.OnLaunchAreaClicked += this.CancelAsteroidCreation;
 	}
 
 	// Use this for initialization
@@ -141,11 +145,6 @@ public class AsteroidCreator : MonoBehaviour {
 		this.UpdateNote();
 		this.UpdateParticlePulse();
 
-		string savePath = "Assets/Resources/Asteroids/" + this.asteroidToEdit.name + ".prefab";
-		GameObject prefabToEdit = Instantiate(this.asteroidToEdit) as GameObject;
-		Object prefab = PrefabUtility.CreateEmptyPrefab(savePath);
-		PrefabUtility.ReplacePrefab(prefabToEdit, prefab, ReplacePrefabOptions.Default);
-		Destroy(prefabToEdit);
 		this.activeGrid.SetActive(false);
 		this.gameObject.SetActive(false);
 	}

@@ -21,7 +21,10 @@ public class GameManager : MonoBehaviour {
 		{
 			instance = this;
 		}
+	}
 
+	void Start()
+	{
 		AsteroidSelector.SetupAsteroidSelector();
 	}
 
@@ -46,8 +49,10 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void OpenAsteroidCreator(GameObject asteroidToEdit)
+	public void OpenAsteroidCreator(string asteroidToEditName)
 	{
+		GameObject asteroidToEdit = AsteroidSelector.asteroidMasterDict[asteroidToEditName];
+
 		this.asteroidCreator.gameObject.SetActive(true);
 		this.asteroidCreator.SetupAsteroidCreator(asteroidToEdit);
 	}

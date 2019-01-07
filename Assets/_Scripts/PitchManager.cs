@@ -18,7 +18,7 @@ public class PitchManager : MonoBehaviour {
 	public List<AudioSource> audioSourceMasterList;
 
 	//Volume fields
-	private float focusVolumePercent = 0.1f;		//Percent of "total volume" the focused notes will take up
+	private float focusVolumePercent = 0.15f;		//Percent of "total volume" the focused notes will take up
 	private int numFocusedNotes = 1;				//Number of most recent notes that will be played at a higher volume
 
 	[SerializeField]

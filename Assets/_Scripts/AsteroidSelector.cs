@@ -21,7 +21,7 @@ public static class AsteroidSelector {
 	// Use AsteroidSelector for initialization
 	public static void SetupAsteroidSelector () {
 		AsteroidSelector.LoadAsteroidMasterDict();
-		AsteroidSelector.selectedAsteroid = AsteroidSelector.asteroidMasterDict["QuarterNote"];
+		AsteroidSelector.SelectAsteroid("QuarterNote");
 	}
 
 	private static void LoadAsteroidMasterDict()
@@ -30,14 +30,14 @@ public static class AsteroidSelector {
 
 		foreach (string asteroidName in AsteroidSelector.asteroidNames)
 		{
-			GameObject asteroidPrefab = Resources.Load("Asteroids/" + asteroidName) as GameObject;
+			GameObject asteroidPrefab = GameObject.Find(asteroidName);
 			AsteroidSelector.asteroidMasterDict.Add(asteroidName, asteroidPrefab);
 		}
 	}
 
 	public static void SelectAsteroid(string selectedAsteroidName)
 	{
-		AsteroidSelector.selectedAsteroid = Resources.Load("Asteroids/" + selectedAsteroidName) as GameObject;
+		AsteroidSelector.selectedAsteroid = AsteroidSelector.asteroidMasterDict[selectedAsteroidName];
 		AsteroidSelector.OnAsteroidSelected(selectedAsteroidName);
 	}
 }

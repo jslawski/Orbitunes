@@ -14,6 +14,8 @@ public class Asteroid : MonoBehaviour {
 	private float gravitationalForce = 0;
 	private Vector3 appliedForce = Vector3.zero;
 
+	public bool isStationary = true;
+
 	public void SetupAsteroid(LaunchValues launchValues)
 	{
 		Vector2 initialVelocity = launchValues.curDirection * launchValues.rawMagnitude;
@@ -23,6 +25,11 @@ public class Asteroid : MonoBehaviour {
 	}
 
 	private void FixedUpdate () {
+		if (this.isStationary == true)
+		{
+			return;
+		}
+
 		this.radius = Vector3.Magnitude(this.transform.position);
 		this.gravitationalForce = -(CenterStar.mass) / (Mathf.Pow(this.radius, 2.0f));
 		this.appliedForce = (this.transform.position).normalized * this.gravitationalForce;

@@ -8,7 +8,7 @@ public class NoteButton : MonoBehaviour {
 
 	private Image buttonImage;
 
-	private void Start()
+	private void Awake()
 	{
 		this.buttonImage = this.gameObject.GetComponent<Image>();
 		AsteroidSelector.OnAsteroidSelected += ChangeButtonColor;
