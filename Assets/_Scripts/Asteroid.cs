@@ -14,9 +14,9 @@ public class Asteroid : MonoBehaviour {
 	private float gravitationalForce = 0;
 	private Vector3 appliedForce = Vector3.zero;
 
-	public bool isStationary = true;
+    public bool isStationary = true;
 
-	public void SetupAsteroid(LaunchValues launchValues)
+    public void SetupAsteroid(LaunchValues launchValues)
 	{
 		Vector2 initialVelocity = launchValues.curDirection * launchValues.rawMagnitude;
 		this.rigidBody.velocity = initialVelocity;
@@ -37,7 +37,7 @@ public class Asteroid : MonoBehaviour {
 
 		if (this.IsWithinViewport() != true) 
 		{
-			Destroy(this.gameObject);
+            DestroyAsteroid();
 		}
 	}
 
@@ -54,6 +54,6 @@ public class Asteroid : MonoBehaviour {
 
 	private void DestroyAsteroid()
 	{
-		Destroy(this.gameObject);
+        Destroy(this.gameObject);
 	}
 }

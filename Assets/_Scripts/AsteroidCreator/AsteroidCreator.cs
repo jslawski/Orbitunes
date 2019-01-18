@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Analytics;
 
 public class AsteroidCreator : MonoBehaviour {
 
@@ -52,10 +53,12 @@ public class AsteroidCreator : MonoBehaviour {
 	{
 		this.asteroidToEdit = asteroidToEdit;
 
-		Note originalNote = asteroidToEdit.GetComponentInChildren<Note>();
+		PhraseMetadata originalPhrase = asteroidToEdit.GetComponentInChildren<PhraseMetadata>();
+        Note originalNote = asteroidToEdit.GetComponentInChildren<Note>();
+
 		this.asteroidColor = asteroidToEdit.GetComponentInChildren<ParticlePulse>().particleColor;
-		this.phraseNumber = originalNote.phraseNumber;
-		this.beatsPerPhrase = originalNote.beatsPerPhrase;
+		this.phraseNumber = originalPhrase.phraseNumber;
+		this.beatsPerPhrase = originalPhrase.beatsPerPhrase;
 		this.previewAudio.clip = originalNote.noteAudio.clip;
 	}
 
@@ -95,7 +98,9 @@ public class AsteroidCreator : MonoBehaviour {
 	public void UpdateBeatsPerPhrase(int newBeatsPerPhrase)
 	{
 		this.beatsPerPhrase = newBeatsPerPhrase;
-	}
+
+        AnalyticsEvent.Custom("Beat_Button_Clicked", new Dictionary<string, object> { { "Beats_Per_Phrase", newBeatsPerPhrase } });
+    }
 
 	#region Preview
 	public void StartPreview()
@@ -103,12 +108,15 @@ public class AsteroidCreator : MonoBehaviour {
 		this.previewPhrase = new Phrase(this.phraseNumber, this.beatsPerPhrase);
 
 		Metronome.OnStep += this.PlayStep;
-	}
+
+        AnalyticsEvent.Custom("Play_Preview_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.phraseNumber } });
+    }
 
 	public void EndPreview()
 	{
-		Metronome.OnStep -= this.PlayStep;	
-	}
+		Metronome.OnStep -= this.PlayStep;
+        AnalyticsEvent.Custom("Stop_Preview_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.phraseNumber } });
+    }
 
 	private void PlayStep()
 	{
@@ -129,10 +137,10 @@ public class AsteroidCreator : MonoBehaviour {
 	#region Saving
 	private void UpdateNote()
 	{
-		Note oldNote = this.asteroidToEdit.GetComponentInChildren<Note>();
-		oldNote.phraseNumber = this.phraseNumber;
-		oldNote.beatsPerPhrase = this.beatsPerPhrase;
-	}
+		PhraseMetadata oldPhrase = this.asteroidToEdit.GetComponentInChildren<PhraseMetadata>();
+        oldPhrase.phraseNumber = this.phraseNumber;
+        oldPhrase.beatsPerPhrase = this.beatsPerPhrase;
+    }
 
 	private void UpdateParticlePulse()
 	{
@@ -147,7 +155,9 @@ public class AsteroidCreator : MonoBehaviour {
 
 		this.activeGrid.SetActive(false);
 		this.gameObject.SetActive(false);
-	}
+
+        AnalyticsEvent.Custom("Save_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.phraseNumber } });
+    }
 	#endregion
 
 	#region Cancel
@@ -155,6 +165,8 @@ public class AsteroidCreator : MonoBehaviour {
 	{
 		this.activeGrid.SetActive(false);
 		this.gameObject.SetActive(false);
-	}
+
+        AnalyticsEvent.Custom("Cancel_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.phraseNumber } });
+    }
 	#endregion
 }

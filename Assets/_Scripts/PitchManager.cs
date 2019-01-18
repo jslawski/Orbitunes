@@ -21,8 +21,12 @@ public class PitchManager : MonoBehaviour {
 	private float focusVolumePercent = 0.15f;		//Percent of "total volume" the focused notes will take up
 	private int numFocusedNotes = 1;				//Number of most recent notes that will be played at a higher volume
 
+    [SerializeField]
+    private PhraseMetadata bassMetadata;
 	[SerializeField]
-	private Note bassNote;
+	private NoteParent bassNoteParent;
+    [SerializeField]
+    private Note bassNote;
 
 	// Use this for initialization
 	void Awake () {
@@ -33,7 +37,7 @@ public class PitchManager : MonoBehaviour {
 
 		this.CreateCMajorScale();
 
-		bassNote.SetupNote(false);
+		bassNoteParent.SetupNoteParent(bassNote, bassMetadata);
 	}
 
 	private void CreateCMajorScale()

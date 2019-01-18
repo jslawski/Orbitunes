@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 /* * *
  * The AsteroidSelector class handles the management of which asteroid is currently selected.
@@ -39,5 +40,7 @@ public static class AsteroidSelector {
 	{
 		AsteroidSelector.selectedAsteroid = AsteroidSelector.asteroidMasterDict[selectedAsteroidName];
 		AsteroidSelector.OnAsteroidSelected(selectedAsteroidName);
-	}
+
+        AnalyticsEvent.Custom("Asteroid_Selected", new Dictionary<string, object> { { "Asteroid_Name", selectedAsteroidName } });
+    }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Analytics;
 
 public class EditButton : MonoBehaviour {
 
@@ -9,6 +10,8 @@ public class EditButton : MonoBehaviour {
 	private string asteroidToEditName;
 
 	private Button button;
+
+    private bool firstTimeEditButton = false;
 
 	// Use this for initialization
 	void Start() 
@@ -21,6 +24,13 @@ public class EditButton : MonoBehaviour {
 	{
 		GameManager.instance.OpenAsteroidCreator(asteroidToEditName);
 		AsteroidSelector.SelectAsteroid(asteroidToEditName);
-	}
+
+        if (this.firstTimeEditButton == false)
+        {
+            AnalyticsEvent.Custom("Edit_Button_Clicked_First", new Dictionary<string, object> { { "Time_Elapsed", Time.timeSinceLevelLoad }, { "Asteroid_Name", asteroidToEditName } });
+        }
+
+        AnalyticsEvent.Custom("Edit_Button_Clicked", new Dictionary<string, object> { { "Asteroid_Name", asteroidToEditName } });
+    }
 
 }

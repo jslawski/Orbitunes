@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class CollapsableMenu : MonoBehaviour {
 	private RectTransform[] menuRectTransforms;
@@ -12,6 +13,8 @@ public class CollapsableMenu : MonoBehaviour {
 	private RectTransform panelRect;
 	[SerializeField]
 	private RectTransform buttonRect;
+
+    private bool firstTimeMenuOpened = false;
 
 	private void Start()
 	{
@@ -29,11 +32,19 @@ public class CollapsableMenu : MonoBehaviour {
 		if (this.menuExpanded == true)
 		{
 			this.ChangeMenuPosition(Vector2.down * this.menuExpandSize);
-		}
+
+            AnalyticsEvent.Custom("Asteroid_Menu_Closed", new Dictionary<string, object> { { "Time_Elapsed", Time.timeSinceLevelLoad } });
+        }
 		else
 		{
 			ChangeMenuPosition(Vector2.up * this.menuExpandSize);
-		}
+
+            if (this.firstTimeMenuOpened == false)
+            {
+                AnalyticsEvent.Custom("Asteroid_Menu_Opened", new Dictionary<string, object> { { "Time_Elapsed", Time.timeSinceLevelLoad } });
+                this.firstTimeMenuOpened = true;
+            }
+        }
 
 		this.menuExpanded = !this.menuExpanded;
 	}
@@ -44,6 +55,8 @@ public class CollapsableMenu : MonoBehaviour {
 		{
 			this.ChangeMenuPosition(Vector2.down * this.menuExpandSize);
 			this.menuExpanded = false;
-		}
+
+            AnalyticsEvent.Custom("Asteroid_Menu_AutoClosed", new Dictionary<string, object> { { "Time_Elapsed", Time.timeSinceLevelLoad } });
+        }
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class GameManager : MonoBehaviour {
 
@@ -45,7 +46,8 @@ public class GameManager : MonoBehaviour {
 	{
 		if (GameManager.OnRestartButtonClicked != null)
 		{
-			GameManager.OnRestartButtonClicked();
+            AnalyticsEvent.Custom("Reset_Clicked", new Dictionary<string, object> {{ "time_elapsed", Time.timeSinceLevelLoad }});
+            GameManager.OnRestartButtonClicked();
 		}
 	}
 
@@ -55,7 +57,9 @@ public class GameManager : MonoBehaviour {
 
 		this.asteroidCreator.gameObject.SetActive(true);
 		this.asteroidCreator.SetupAsteroidCreator(asteroidToEdit);
-	}
+
+        AnalyticsEvent.Custom("Asteroid_Creator_Opened", new Dictionary<string, object> { { "asteroid_name", asteroidToEditName }, { "time_elapsed", Time.timeSinceLevelLoad } });
+    }
 }
 
 public struct LaunchValues
