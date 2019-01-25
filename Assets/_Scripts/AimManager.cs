@@ -31,7 +31,11 @@ public class AimManager : MonoBehaviour, IPointerDownHandler
 
 	public void OnPointerDown(PointerEventData data)
 	{
-		AimManager.OnLaunchAreaClicked();
+        if (AimManager.OnLaunchAreaClicked != null)
+        {
+            AimManager.OnLaunchAreaClicked();
+        }
+
 		this.InstantiateAimLine();
 	}
 

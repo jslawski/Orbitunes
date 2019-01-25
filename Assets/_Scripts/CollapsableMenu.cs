@@ -16,9 +16,17 @@ public class CollapsableMenu : MonoBehaviour {
 
     private bool firstTimeMenuOpened = false;
 
+    [SerializeField]
+    private bool beginOpen = false;
+
 	private void Start()
 	{
-		AimManager.OnLaunchAreaClicked += AutoCloseMenu;
+		//AimManager.OnLaunchAreaClicked += AutoCloseMenu;
+
+        if (this.beginOpen == true)
+        {
+            this.ChangeMenuState();
+        }
 	}
 
 	private void ChangeMenuPosition(Vector2 changeVector)
@@ -45,6 +53,8 @@ public class CollapsableMenu : MonoBehaviour {
                 this.firstTimeMenuOpened = true;
             }
         }
+
+        this.buttonRect.Rotate(new Vector3(0, 0, 180));
 
 		this.menuExpanded = !this.menuExpanded;
 	}

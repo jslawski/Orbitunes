@@ -10,9 +10,18 @@ public class BeatGrid : MonoBehaviour
 
 	private GameObject stepButtonObject;
 
+    [SerializeField]
+    private RectTransform gridArea;
+    [SerializeField]
+    private GridLayoutGroup layoutGroup;
+
 	public void SetupBeatGrid(int beatsPerPhrase)
 	{
 		this.stepButtonObject = Resources.Load("StepButton") as GameObject;
+
+        float cellSize = this.gridArea.rect.width / numSteps;
+
+        this.layoutGroup.cellSize = new Vector2(cellSize, cellSize);
 
 		this.GenerateStepButtons();
 	}

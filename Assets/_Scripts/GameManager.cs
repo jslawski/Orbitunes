@@ -21,7 +21,8 @@ public class GameManager : MonoBehaviour {
 		if (instance == null)
 		{
 			instance = this;
-		}
+            AnalyticsEvent.Custom("Game_Loaded", new Dictionary<string, object> {});
+        }
 	}
 
 	void Start()
