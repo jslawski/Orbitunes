@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 /* * * 
  * The Note class handles the behavior of any object that emits sound to the beat of the Metronome.  
@@ -15,7 +12,7 @@ public class Note : MonoBehaviour {
 	public AudioSource noteAudio;
 
     private float curDistanceFromStar = 0f;
-	private float maxDistanceFromStar = 12f;
+	private float maxDistanceFromStar = 35f;
 	private int curPitchIndex = 0;
 
     //Note to self: When you declare a constructor, you need to set ALL of the values of the component.  Otherwise they are set to 0.
@@ -54,7 +51,9 @@ public class Note : MonoBehaviour {
 
 		this.curPitchIndex = Mathf.RoundToInt((this.curDistanceFromStar / this.maxDistanceFromStar) * (PitchManager.notesInScale - 1));
 
-		if (this.curPitchIndex > PitchManager.notesInScale - 1) 
+        Debug.LogError("Current Pitch Index:" + this.curPitchIndex);
+
+        if (this.curPitchIndex > PitchManager.notesInScale - 1) 
 		{
 			this.curPitchIndex = PitchManager.notesInScale - 1;
 		}
@@ -65,7 +64,7 @@ public class Note : MonoBehaviour {
 	{
 	    this.GetCurrentPitchIndex(leadingAsteroid);
 
-		this.noteAudio.pitch = PitchManager.instance.cMajorScale[this.curPitchIndex];
+        this.noteAudio.pitch = PitchManager.instance.cMajorScale[this.curPitchIndex];
 		this.noteAudio.PlayScheduled(Metronome.nextBeatTime);
 	}
 
