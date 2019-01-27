@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class NoteButton : MonoBehaviour {
@@ -23,12 +21,11 @@ public class NoteButton : MonoBehaviour {
 	{
 		if (selectedAsteroidName == this.asteroidName)
 		{
-			Color buttonColor = AsteroidSelector.selectedAsteroid.GetComponentInChildren<ParticlePulse>().particleColor;
-			this.buttonImage.color = buttonColor;
+            this.buttonImage.material.SetFloat("_Selected", 1.0f);
 		}
 		else
 		{
-			this.buttonImage.color = Color.white;
+            this.buttonImage.material.SetFloat("_Selected", 0.0f);
 		}
 	}
 }
