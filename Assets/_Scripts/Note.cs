@@ -51,8 +51,6 @@ public class Note : MonoBehaviour {
 
 		this.curPitchIndex = Mathf.RoundToInt((this.curDistanceFromStar / this.maxDistanceFromStar) * (PitchManager.notesInScale - 1));
 
-        Debug.LogError("Current Pitch Index:" + this.curPitchIndex);
-
         if (this.curPitchIndex > PitchManager.notesInScale - 1) 
 		{
 			this.curPitchIndex = PitchManager.notesInScale - 1;

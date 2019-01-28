@@ -100,7 +100,9 @@ public class AsteroidGenerator : MonoBehaviour
                 //this.SetupNote(asteroidObject);
                 this.initialAsteroidGenerated = true;
 
-                AnalyticsEvent.Custom("Asteroid_Launched", new Dictionary<string, object> { { "Asteroid_Name", this.launchAsteroid.name }, { "Phrase_Number", this.phrase.phraseNumber } });
+                AnalyticsEvent.Custom("Asteroid_Launched", new Dictionary<string, object> { { "Asteroid_Name", this.launchAsteroid.name }, { "Phrase_Number", this.phrase.phraseNumber },
+                    { "Launch_Start_Point", this.launchValues.startPoint }, { "Launch_End_Point", this.launchValues.endPoint }, { "Launch_Direction", this.launchValues.curDirection },
+                    { "Launch_Magnitude", this.launchValues.rawMagnitude } });
             }
             else
             {

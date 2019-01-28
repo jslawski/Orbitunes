@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class AimManager : MonoBehaviour, IPointerDownHandler 
@@ -53,5 +51,5 @@ public class AimManager : MonoBehaviour, IPointerDownHandler
 		GameObject newAsteroidGenerator = Instantiate(this.asteroidGeneratorPrefab, launchValues.startPoint, new Quaternion()) as GameObject;
 		AsteroidGenerator generator = newAsteroidGenerator.GetComponent<AsteroidGenerator>();
 		generator.SetupAsteroidGenerator(launchValues);
-	}
+    }
 }
