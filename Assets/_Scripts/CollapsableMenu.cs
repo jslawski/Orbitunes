@@ -6,7 +6,7 @@ using UnityEngine.Analytics;
 public class CollapsableMenu : MonoBehaviour {
 	private RectTransform[] menuRectTransforms;
 
-	public float menuExpandSize = 100f;
+	private float menuExpandSize;
 	private bool menuExpanded = false;
 
 	[SerializeField]
@@ -21,11 +21,13 @@ public class CollapsableMenu : MonoBehaviour {
 
 	private void Start()
 	{
-		//AimManager.OnLaunchAreaClicked += AutoCloseMenu;
+        //AimManager.OnLaunchAreaClicked += AutoCloseMenu;
+
+        this.menuExpandSize = this.panelRect.rect.height;
 
         if (this.beginOpen == true)
         {
-            this.ChangeMenuState();
+            this.menuExpanded = true;
         }
 	}
 

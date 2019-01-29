@@ -19,7 +19,12 @@ public class BeatGrid : MonoBehaviour
 	{
 		this.stepButtonObject = Resources.Load("StepButton") as GameObject;
 
-        float cellSize = this.gridArea.rect.width / numSteps;
+        float cellSize = this.gridArea.rect.width / this.numSteps;
+
+        if (this.gridArea.rect.height < cellSize)
+        {
+            cellSize = this.gridArea.rect.height;
+        }
 
         this.layoutGroup.cellSize = new Vector2(cellSize, cellSize);
 
