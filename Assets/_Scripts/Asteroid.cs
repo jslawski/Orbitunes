@@ -38,7 +38,7 @@ public class Asteroid : MonoBehaviour {
 
         if (Mathf.Abs(this.gravitationalForce) > this.maxGravitationalForce)
         {
-            this.gravitationalForce = -1500f;
+            this.gravitationalForce = -2000f;
         }
 
 		this.appliedForce = (this.transform.position).normalized * this.gravitationalForce;

@@ -7,5 +7,5 @@ using UnityEngine;
 public static class CenterStar {
 
 	//Star Attributes
-	public static float mass = 7000f;
+	public static float mass = 20000f;
 }
