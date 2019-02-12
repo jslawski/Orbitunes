@@ -45,15 +45,19 @@ public class NoteParent : MonoBehaviour
         //PitchManager.instance.RemoveAudioSource(this.noteAudio);
     }
 
+    public void AddNoteToList(Note noteToAdd)
+    {
+        this.asteroidNotes.Add(noteToAdd);
+        //noteToAdd.OnNoteDestroyed += this.RemoveNoteFromList;
+    }
+
     private void RemoveNoteFromList(Note noteToRemove)
     {
-        bool test = this.asteroidNotes.Remove(noteToRemove);
-
-        Debug.LogError("TEST: " + test);
+        this.asteroidNotes.Remove(noteToRemove);
 
         noteToRemove.OnNoteDestroyed -= this.RemoveNoteFromList;
 
-        if (this.asteroidNotes.Count <= 0)
+        if (this.gameObject.transform.childCount <= 0)
         {
             Destroy(this.gameObject);
         }

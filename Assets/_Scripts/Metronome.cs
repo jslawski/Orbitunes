@@ -20,6 +20,8 @@ public static class Metronome {
 
 	public static bool metronomeStarted = false;
 
+    public static bool metronomePaused = false;
+
 	public static IEnumerator StartMetronome()
 	{
 		Metronome.secondsBetweenBeats = 60.0f / Metronome.beatsPerMinute;
@@ -31,16 +33,24 @@ public static class Metronome {
 
 		while (true) 
 		{
-			double curTime = AudioSettings.dspTime;
-			if (curTime >= nextBeatTime)
-			{
-				if (Metronome.OnStep != null) 
-				{
-					Metronome.OnStep();
-				}
+            if (Metronome.metronomePaused == false)
+            {
+                double curTime = AudioSettings.dspTime;
 
-				Metronome.nextBeatTime += Metronome.secondsBetweenSteps;
-			}
+                if (curTime >= nextBeatTime)
+                {
+                    if (Metronome.OnStep != null)
+                    {
+                        Metronome.OnStep();
+                    }
+
+                    Metronome.nextBeatTime += Metronome.secondsBetweenSteps;
+                }
+            }
+            else
+            {
+                Metronome.nextBeatTime = AudioSettings.dspTime;
+            }
 
 			yield return null;
 		}

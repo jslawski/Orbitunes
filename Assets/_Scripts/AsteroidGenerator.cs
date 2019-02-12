@@ -57,14 +57,9 @@ public class AsteroidGenerator : MonoBehaviour
 
     private void AddNoteToNoteParent(GameObject asteroid)
     {
-        this.currentNoteParent.asteroidNotes.Add(asteroid.GetComponentInChildren<Note>());
+        this.currentNoteParent.AddNoteToList(asteroid.GetComponentInChildren<Note>());
+        asteroid.transform.parent = this.currentNoteParent.transform;
     }
-
-	/*private void SetupNote(GameObject asteroid)
-	{
-		Note newNote = asteroid.GetComponentInChildren<Note>();
-		newNote.SetupNote(true);
-	}*/
 
 	private void SetupParticlePulse(GameObject asteroid)
 	{
@@ -96,8 +91,8 @@ public class AsteroidGenerator : MonoBehaviour
             if (this.initialAsteroidGenerated == false)
             {
                 this.SetupNoteParent(asteroidObject);
+                asteroidObject.transform.parent = this.currentNoteParent.transform;
 
-                //this.SetupNote(asteroidObject);
                 this.initialAsteroidGenerated = true;
 
                 AnalyticsEvent.Custom("Asteroid_Launched", new Dictionary<string, object> { { "Asteroid_Name", this.launchAsteroid.name }, { "Phrase_Number", this.phrase.phraseNumber },

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour {
 
@@ -23,9 +24,19 @@ public class GameManager : MonoBehaviour {
 			instance = this;
             AnalyticsEvent.Custom("Game_Loaded", new Dictionary<string, object> {});
         }
-	}
 
-	void Start()
+        //StartCoroutine(this.LoadLevel());
+
+    }
+
+    private IEnumerator LoadLevel()
+    {
+        SceneManager.LoadScene("AsteroidCreator", LoadSceneMode.Additive);
+        yield return null;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("AsteroidCreator"));
+    }
+
+    void Start()
 	{
 		AsteroidSelector.SetupAsteroidSelector();
 	}
@@ -37,11 +48,40 @@ public class GameManager : MonoBehaviour {
 			Debug.Break();
 		}
 
-		if (Input.GetKey(KeyCode.Escape)) 
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            this.TogglePause();
+        }
+
+        if (Input.GetKey(KeyCode.Escape)) 
 		{
 			Application.Quit();
 		}
 	}
+
+    private void TogglePause()
+    {
+        Metronome.metronomePaused = !Metronome.metronomePaused;
+
+        if (Metronome.metronomePaused == true)
+        {
+            Time.timeScale = 0f;
+        }
+        else
+        {
+            Metronome.OnStep += this.UnPauseInTime;
+        }
+    }
+
+    /// <summary>
+    /// This function is needed to ensure that physics continue at the exact same time that the audio continues, so they don't fall out of sync
+    /// </summary>
+    private void UnPauseInTime()
+    {
+        Metronome.OnStep -= this.UnPauseInTime;
+
+        Time.timeScale = 1f;
+    }
 
 	public void RestartGame()
 	{

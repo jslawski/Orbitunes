@@ -12,9 +12,12 @@ public class SlingShot : MonoBehaviour
 
     private float slingShotRadius = 2f;
     private float slingShotLaunchRadius = 3f;
-    private float launchMagnitude = 10f;
+    private float launchMagnitude = 7f;
 
     private LaunchValues slingShotLaunchValues;
+
+    [SerializeField]
+    private PredictionLine predictionLine;
 
     private void Awake()
     {
@@ -92,6 +95,11 @@ public class SlingShot : MonoBehaviour
 
             this.UpdateCurrentMagnitude();
 
+            if (this.slingShotLaunchValues.rawMagnitude >= 1f)
+            {
+                this.predictionLine.UpdatePredictionLine(this.slingShotLaunchValues);
+            }
+
             yield return null;
         }
 
@@ -105,8 +113,6 @@ public class SlingShot : MonoBehaviour
 
     private IEnumerator AnimateSlingShotCoroutine(LaunchValues finalLaunchValues)
     {
-        Vector2 originalEndPoint = finalLaunchValues.endPoint;
-
         while ((finalLaunchValues.endPoint - finalLaunchValues.startPoint).magnitude > 0.01f)
         {
             finalLaunchValues.endPoint = Vector2.Lerp(finalLaunchValues.endPoint, finalLaunchValues.startPoint, 0.5f);

@@ -14,8 +14,8 @@ public class Asteroid : MonoBehaviour {
 	private float gravitationalForce = 0;
 	private Vector3 appliedForce = Vector3.zero;
 
-    private float maxGravitationalForce = 1500f;
-    private float maxVelocity = 90f;
+    private float maxGravitationalForce = 3000f;
+    private float maxVelocity = 120f;
 
     public bool isStationary = true;
 
@@ -38,7 +38,7 @@ public class Asteroid : MonoBehaviour {
 
         if (Mathf.Abs(this.gravitationalForce) > this.maxGravitationalForce)
         {
-            this.gravitationalForce = -2000f;
+            this.gravitationalForce = -3000;
         }
 
 		this.appliedForce = (this.transform.position).normalized * this.gravitationalForce;
@@ -46,10 +46,8 @@ public class Asteroid : MonoBehaviour {
 
         if (this.rigidBody.velocity.magnitude > this.maxVelocity)
         {
-            this.rigidBody.AddForce(this.appliedForce);
+            this.rigidBody.velocity = this.rigidBody.velocity.normalized * this.maxVelocity;
         }
-
-        //this.rigidbody.velocity = 0.5f * this.rigidbody.velocity;
 
 		if (this.IsWithinViewport() != true) 
 		{
