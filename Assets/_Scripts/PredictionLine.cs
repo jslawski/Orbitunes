@@ -9,7 +9,7 @@ public class PredictionLine : MonoBehaviour {
     {
         this.lineObject = this.gameObject.GetComponent<LineRenderer>();
 
-        Color lineColor = AsteroidSelector.selectedAsteroid.GetComponentInChildren<ParticlePulse>().particleColor;
+        Color lineColor = AsteroidSelector.selectedAsteroid.asteroidColor;
         this.lineObject.startColor = lineColor;
         this.lineObject.endColor = lineColor * new Color(1.0f, 1.0f, 1.0f, 0f);
     }

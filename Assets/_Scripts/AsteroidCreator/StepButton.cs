@@ -23,7 +23,7 @@ public class StepButton : MonoBehaviour  {
 			{
 				if (value == true)
 				{
-					buttonImage.color = AsteroidCreator.instance.asteroidColor;
+					buttonImage.color = AsteroidSelector.selectedAsteroid.asteroidColor;
 				}
 				else
 				{
@@ -44,7 +44,7 @@ public class StepButton : MonoBehaviour  {
 		button.onClick.AddListener(delegate{AsteroidCreator.instance.UpdatePhraseNumber(stepNumber);});
 		button.onClick.AddListener(ToggleButton);
 
-		if ((this.stepNumber & AsteroidCreator.instance.phraseNumber) > 0)
+		if ((this.stepNumber & AsteroidCreator.instance.newAsteroidTemplate.phraseNumber) > 0)
 		{
 			this.selected = true;
 		}

@@ -11,9 +11,10 @@ using UnityEngine.Analytics;
 public class AsteroidGenerator : MonoBehaviour
 {
     public GameObject noteParentPrefab;
+    public GameObject baseAsteroidPrefab;
 
+    private AsteroidTemplate selectedAsteroidTemplate;
     private LaunchValues launchValues;
-    private GameObject launchAsteroid;
     private Phrase phrase;
     private NoteParent currentNoteParent;
 
@@ -21,11 +22,11 @@ public class AsteroidGenerator : MonoBehaviour
 
     public void SetupAsteroidGenerator(LaunchValues launchValues)
     {
-        this.launchValues = launchValues;
-        this.launchAsteroid = AsteroidSelector.selectedAsteroid;
+        this.selectedAsteroidTemplate = AsteroidSelector.selectedAsteroid;
 
-        PhraseMetadata asteroidPhrase = this.launchAsteroid.GetComponentInChildren<PhraseMetadata>();
-        this.phrase = new Phrase(asteroidPhrase.phraseNumber, asteroidPhrase.beatsPerPhrase);
+        this.launchValues = launchValues;
+
+        this.phrase = new Phrase(this.selectedAsteroidTemplate.phraseNumber, this.selectedAsteroidTemplate.beatsPerPhrase);
 
         Metronome.OnStep += this.LaunchAsteroid;
         GameManager.OnRestartButtonClicked += this.DestroyAsteroidGenerator;
@@ -39,6 +40,8 @@ public class AsteroidGenerator : MonoBehaviour
 
     private void SetupAsteroid(GameObject asteroid)
     {
+        asteroid.GetComponent<MeshRenderer>().material.color = this.selectedAsteroidTemplate.asteroidColor;
+
         Asteroid newAsteroid = asteroid.GetComponent<Asteroid>();
         newAsteroid.isStationary = false;
         newAsteroid.SetupAsteroid(this.launchValues);
@@ -49,23 +52,26 @@ public class AsteroidGenerator : MonoBehaviour
         GameObject newNoteParentObject = GameObject.Instantiate(this.noteParentPrefab, this.transform.position, new Quaternion()) as GameObject;
 
         this.currentNoteParent = newNoteParentObject.GetComponent<NoteParent>();
-        PhraseMetadata metaData = asteroid.GetComponentInChildren<PhraseMetadata>();
         Note asteroidNote = asteroid.GetComponentInChildren<Note>();
+        asteroidNote.noteAudio.clip = this.selectedAsteroidTemplate.asteroidAudio;
 
-        this.currentNoteParent.SetupNoteParent(asteroidNote, metaData);
+        this.currentNoteParent.SetupNoteParent(asteroidNote, this.selectedAsteroidTemplate.phraseNumber, this.selectedAsteroidTemplate.beatsPerPhrase, this.selectedAsteroidTemplate.isDynamic);
     }
 
     private void AddNoteToNoteParent(GameObject asteroid)
     {
-        this.currentNoteParent.AddNoteToList(asteroid.GetComponentInChildren<Note>());
+        Note asteroidNote = asteroid.GetComponentInChildren<Note>();
+        asteroidNote.noteAudio.clip = this.selectedAsteroidTemplate.asteroidAudio;
+
+        this.currentNoteParent.AddNoteToList(asteroidNote);
         asteroid.transform.parent = this.currentNoteParent.transform;
     }
 
 	private void SetupParticlePulse(GameObject asteroid)
 	{
 		ParticlePulse particlePulse = asteroid.GetComponentInChildren<ParticlePulse>();
-		PhraseMetadata asteroidPhrase = asteroid.GetComponentInChildren<PhraseMetadata>();
-		particlePulse.SetupParticlePulse(asteroidPhrase.beatsPerPhrase, this.phrase.currentStep);
+        particlePulse.particleColor = this.selectedAsteroidTemplate.asteroidColor;
+		particlePulse.SetupParticlePulse(this.selectedAsteroidTemplate.beatsPerPhrase, this.phrase.currentStep);
 	}
 
 	private void DestroyAsteroidGenerator()
@@ -84,7 +90,7 @@ public class AsteroidGenerator : MonoBehaviour
 
 		if (this.phrase.ShouldPlayAtStep() == true)
 		{
-			GameObject asteroidObject = GameObject.Instantiate(this.launchAsteroid, this.launchValues.startPoint, new Quaternion()) as GameObject;
+			GameObject asteroidObject = GameObject.Instantiate(this.baseAsteroidPrefab, this.launchValues.startPoint, new Quaternion()) as GameObject;
 			this.SetupAsteroid(asteroidObject);
 
             //Only setup a note for the initial asteroid
@@ -95,7 +101,7 @@ public class AsteroidGenerator : MonoBehaviour
 
                 this.initialAsteroidGenerated = true;
 
-                AnalyticsEvent.Custom("Asteroid_Launched", new Dictionary<string, object> { { "Asteroid_Name", this.launchAsteroid.name }, { "Phrase_Number", this.phrase.phraseNumber },
+                AnalyticsEvent.Custom("Asteroid_Launched", new Dictionary<string, object> { { "Asteroid_Name", this.selectedAsteroidTemplate.asteroidName }, { "Phrase_Number", this.phrase.phraseNumber },
                     { "Launch_Start_Point", this.launchValues.startPoint }, { "Launch_End_Point", this.launchValues.endPoint }, { "Launch_Direction", this.launchValues.curDirection },
                     { "Launch_Magnitude", this.launchValues.rawMagnitude } });
             }

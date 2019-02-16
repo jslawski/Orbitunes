@@ -7,7 +7,7 @@ using UnityEngine.Analytics;
 public class EditButton : MonoBehaviour {
 
 	[SerializeField]
-	private string asteroidToEditName;
+	private int asteroidToEditIndex;
 
 	private Button button;
 
@@ -20,10 +20,10 @@ public class EditButton : MonoBehaviour {
 
 	public void LaunchEdit()
 	{
-		GameManager.instance.OpenAsteroidCreator(asteroidToEditName);
-		AsteroidSelector.SelectAsteroid(asteroidToEditName);
-
-        AnalyticsEvent.Custom("Edit_Button_Clicked", new Dictionary<string, object> { { "Asteroid_Name", asteroidToEditName } });
+        AsteroidSelector.SelectAsteroid(asteroidToEditIndex);
+        GameManager.instance.OpenAsteroidCreator();
+		
+        AnalyticsEvent.Custom("Edit_Button_Clicked", new Dictionary<string, object> { { "Asteroid_Name", AsteroidSelector.selectedAsteroid.asteroidName } });
     }
 
 }

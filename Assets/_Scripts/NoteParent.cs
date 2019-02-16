@@ -17,16 +17,16 @@ public class NoteParent : MonoBehaviour
 
     private Phrase mainPhrase;
 
-    public void SetupNoteParent(Note initialNote, PhraseMetadata metaData) 
+    public void SetupNoteParent(Note initialNote, ushort phraseNumber, int beatsPerPhrase, bool isDynamic) 
     {
         this.asteroidNotes = new List<Note>();
         this.asteroidNotes.Add(initialNote);
         this.leadingAsteroid = initialNote.transform.parent.gameObject;
         //initialNote.OnNoteDestroyed += this.RemoveNoteFromList;
 
-        this.mainPhrase = new Phrase(metaData.phraseNumber, metaData.beatsPerPhrase);
+        this.mainPhrase = new Phrase(phraseNumber, beatsPerPhrase);
 
-        if (metaData.isDynamic == true)
+        if (isDynamic == true)
         {
             Metronome.OnStep += this.PlayDynamicNote;
             this.PlayDynamicNote();

@@ -11,11 +11,8 @@ public class AsteroidCreator : MonoBehaviour {
 	public GameObject[] beatGrids;
 	private GameObject activeGrid;
 
-	public GameObject asteroidToEdit;
-
-	public Color asteroidColor;
-
-	public ushort phraseNumber;
+	private AsteroidTemplate originalAsteroidTemplate;
+    public AsteroidTemplate newAsteroidTemplate;
 
 	[SerializeField]
 	private AudioSource previewAudio;
@@ -23,19 +20,6 @@ public class AsteroidCreator : MonoBehaviour {
 
 	[SerializeField]
 	private PreviewButton previewButton;
-
-	private int _beatsPerPhrase;
-	public int beatsPerPhrase
-	{
-		get { return this._beatsPerPhrase; }
-		set
-		{ 
-			this._beatsPerPhrase = value;
-			this.SetActiveGrid();
-			this.EndPreview();
-			this.previewButton.ToggleToPlayButton();
-		}
-	}
 
 	private void Awake()
 	{
@@ -48,31 +32,45 @@ public class AsteroidCreator : MonoBehaviour {
 		AimManager.OnLaunchAreaClicked += this.CancelAsteroidCreation;
 	}
 
-	// Use this for initialization
-	public void SetupAsteroidCreator(GameObject asteroidToEdit) 
-	{
-		this.asteroidToEdit = asteroidToEdit;
+    // Use this for initialization
+    public void SetupAsteroidCreator()
+    {
+        this.originalAsteroidTemplate = AsteroidSelector.selectedAsteroid;
+        this.SetupNewAsteroidTemplate();
+    }
 
-		PhraseMetadata originalPhrase = asteroidToEdit.GetComponentInChildren<PhraseMetadata>();
-        Note originalNote = asteroidToEdit.GetComponentInChildren<Note>();
+    private void SetupNewAsteroidTemplate()
+    {
+        this.newAsteroidTemplate.asteroidAudio = this.originalAsteroidTemplate.asteroidAudio;
+        this.newAsteroidTemplate.asteroidColor = this.originalAsteroidTemplate.asteroidColor;
+        this.newAsteroidTemplate.phraseNumber = this.originalAsteroidTemplate.phraseNumber;
+        this.newAsteroidTemplate.beatsPerPhrase = this.originalAsteroidTemplate.beatsPerPhrase;
+        this.newAsteroidTemplate.isDynamic = this.originalAsteroidTemplate.isDynamic;
 
-		this.asteroidColor = asteroidToEdit.GetComponentInChildren<ParticlePulse>().particleColor;
-		this.phraseNumber = originalPhrase.phraseNumber;
-		this.beatsPerPhrase = originalPhrase.beatsPerPhrase;
-		this.previewAudio.clip = originalNote.noteAudio.clip;
-	}
+        this.UpdateBeatsPerPhrase(this.newAsteroidTemplate.beatsPerPhrase);
+        this.previewAudio.clip = this.newAsteroidTemplate.asteroidAudio;
+    }
 
-	//Activate the grid that corresponds to the original asteroid's beatsPerPhrase
-	private void SetActiveGrid()
+    private void SaveNewAsteroidTemplate()
+    {
+        this.originalAsteroidTemplate.asteroidAudio = this.newAsteroidTemplate.asteroidAudio;
+        this.originalAsteroidTemplate.asteroidColor = this.newAsteroidTemplate.asteroidColor;
+        this.originalAsteroidTemplate.phraseNumber = this.newAsteroidTemplate.phraseNumber;
+        this.originalAsteroidTemplate.beatsPerPhrase = this.newAsteroidTemplate.beatsPerPhrase;
+        this.originalAsteroidTemplate.isDynamic = this.newAsteroidTemplate.isDynamic;
+    }
+
+    //Activate the grid that corresponds to the original asteroid's beatsPerPhrase
+    private void SetActiveGrid()
 	{
 		for (int i = 0; i < this.beatGrids.Length; i++)
 		{
-			if (i == (this.beatsPerPhrase - 1))
+			if (i == (this.newAsteroidTemplate.beatsPerPhrase - 1))
 			{
 				if ((this.beatGrids[i].gameObject.activeInHierarchy == false))
 				{
 					this.beatGrids[i].SetActive(true);
-					this.beatGrids[i].GetComponent<BeatGrid>().SetupBeatGrid(this.beatsPerPhrase);
+					this.beatGrids[i].GetComponent<BeatGrid>().SetupBeatGrid(this.newAsteroidTemplate.beatsPerPhrase);
 					this.activeGrid = this.beatGrids[i];
 				}
 			}
@@ -85,19 +83,23 @@ public class AsteroidCreator : MonoBehaviour {
 
 	public void UpdatePhraseNumber(ushort stepNumber)
 	{
-		if ((this.phraseNumber & stepNumber) > 0)
+		if ((this.newAsteroidTemplate.phraseNumber & stepNumber) > 0)
 		{
-			this.phraseNumber -= stepNumber;
+			this.newAsteroidTemplate.phraseNumber -= stepNumber;
 		}
 		else
 		{
-			this.phraseNumber += stepNumber;
+			this.newAsteroidTemplate.phraseNumber += stepNumber;
 		}
 	}
 
 	public void UpdateBeatsPerPhrase(int newBeatsPerPhrase)
 	{
-		this.beatsPerPhrase = newBeatsPerPhrase;
+		this.newAsteroidTemplate.beatsPerPhrase = newBeatsPerPhrase;
+
+        this.SetActiveGrid();
+        this.EndPreview();
+        this.previewButton.ToggleToPlayButton();
 
         AnalyticsEvent.Custom("Beat_Button_Clicked", new Dictionary<string, object> { { "Beats_Per_Phrase", newBeatsPerPhrase } });
     }
@@ -105,23 +107,23 @@ public class AsteroidCreator : MonoBehaviour {
 	#region Preview
 	public void StartPreview()
 	{
-		this.previewPhrase = new Phrase(this.phraseNumber, this.beatsPerPhrase);
+		this.previewPhrase = new Phrase(this.newAsteroidTemplate.phraseNumber, this.newAsteroidTemplate.beatsPerPhrase);
 
 		Metronome.OnStep += this.PlayStep;
 
-        AnalyticsEvent.Custom("Play_Preview_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.phraseNumber } });
+        AnalyticsEvent.Custom("Play_Preview_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.newAsteroidTemplate.phraseNumber } });
     }
 
 	public void EndPreview()
 	{
 		Metronome.OnStep -= this.PlayStep;
-        AnalyticsEvent.Custom("Stop_Preview_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.phraseNumber } });
+        AnalyticsEvent.Custom("Stop_Preview_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.newAsteroidTemplate.phraseNumber } });
     }
 
 	private void PlayStep()
 	{
 		//At every step, check for updates to the phrase.  Allows player to edit the phrase in real time.
-		Phrase mostRecentPhrase = new Phrase(this.phraseNumber, this.beatsPerPhrase);
+		Phrase mostRecentPhrase = new Phrase(this.newAsteroidTemplate.phraseNumber, this.newAsteroidTemplate.beatsPerPhrase);
 		mostRecentPhrase.SyncToStep(this.previewPhrase.currentStep);
 		this.previewPhrase = mostRecentPhrase;
 
@@ -135,28 +137,30 @@ public class AsteroidCreator : MonoBehaviour {
 	#endregion
 
 	#region Saving
-	private void UpdateNote()
+	/*private void UpdateNote()
 	{
 		PhraseMetadata oldPhrase = this.asteroidToEdit.GetComponentInChildren<PhraseMetadata>();
-        oldPhrase.phraseNumber = this.phraseNumber;
-        oldPhrase.beatsPerPhrase = this.beatsPerPhrase;
+        oldPhrase.phraseNumber = this.newAsteroidTemplate.phraseNumber;
+        oldPhrase.beatsPerPhrase = this.newAsteroidTemplate.beatsPerPhrase;
     }
 
 	private void UpdateParticlePulse()
 	{
 		ParticlePulse oldParticlePulse = this.asteroidToEdit.GetComponentInChildren<ParticlePulse>();
-		oldParticlePulse.particleColor = this.asteroidColor;
-	}
+		oldParticlePulse.particleColor = this.newAsteroidTemplate.asteroidColor;
+	}*/
 
-	public void SavePrefab()
+	public void SaveTemplate()
 	{
-		this.UpdateNote();
-		this.UpdateParticlePulse();
+        this.SaveNewAsteroidTemplate();
+
+        //this.UpdateNote();
+		//this.UpdateParticlePulse();
 
 		this.activeGrid.SetActive(false);
 		this.gameObject.SetActive(false);
 
-        AnalyticsEvent.Custom("Save_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.phraseNumber } });
+        AnalyticsEvent.Custom("Save_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.newAsteroidTemplate.phraseNumber } });
     }
 	#endregion
 
@@ -166,7 +170,7 @@ public class AsteroidCreator : MonoBehaviour {
 		this.activeGrid.SetActive(false);
 		this.gameObject.SetActive(false);
 
-        AnalyticsEvent.Custom("Cancel_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.phraseNumber } });
+        AnalyticsEvent.Custom("Cancel_Button_Clicked", new Dictionary<string, object> { { "Phrase_Number", this.newAsteroidTemplate.phraseNumber } });
     }
 	#endregion
 }

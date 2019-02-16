@@ -8,26 +8,11 @@
  * The NoteParent class should handle the overall phrase and decide when a note should/shouldn't be played
  *  *  */
 public class Note : MonoBehaviour {
-	public string noteName;
 	public AudioSource noteAudio;
 
     private float curDistanceFromStar = 0f;
 	private float maxDistanceFromStar = 35f;
 	private int curPitchIndex = 0;
-
-    //Note to self: When you declare a constructor, you need to set ALL of the values of the component.  Otherwise they are set to 0.
-    /*public Note(string noteName, AudioSource noteAudio, ushort phraseNumber, int beatsPerPhrase)
-	{
-		this.noteName = noteName;
-		this.noteAudio = noteAudio;
-		this.phraseNumber = phraseNumber;
-		this.beatsPerPhrase = beatsPerPhrase;
-	}*/
-
-    /*public void SetupNote(bool isDynamic)
-	{
-		PitchManager.instance.AddAudioSource(this.noteAudio);
-	}*/
 
     public delegate void NoteDestroyed(Note thisNote);
     public event NoteDestroyed OnNoteDestroyed;

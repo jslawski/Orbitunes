@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 public class NoteButton : MonoBehaviour {
-	public string asteroidName = string.Empty;
+	public int asteroidIndex = 0;
 
 	private Image buttonImage;
 
@@ -14,12 +14,12 @@ public class NoteButton : MonoBehaviour {
 
 	public void SelectButton()
 	{
-		AsteroidSelector.SelectAsteroid(asteroidName);
+		AsteroidSelector.SelectAsteroid(this.asteroidIndex);
 	}
 
-	private void ChangeButtonColor(string selectedAsteroidName)
+	private void ChangeButtonColor(int selectedIndex)
 	{
-		if (selectedAsteroidName == this.asteroidName)
+		if (selectedIndex == this.asteroidIndex)
 		{
             this.buttonImage.material.SetFloat("_Selected", 1.0f);
 		}

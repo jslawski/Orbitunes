@@ -92,14 +92,13 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	public void OpenAsteroidCreator(string asteroidToEditName)
+	public void OpenAsteroidCreator()
 	{
-		GameObject asteroidToEdit = AsteroidSelector.asteroidMasterDict[asteroidToEditName];
-
 		this.asteroidCreator.gameObject.SetActive(true);
-		this.asteroidCreator.SetupAsteroidCreator(asteroidToEdit);
 
-        AnalyticsEvent.Custom("Asteroid_Creator_Opened", new Dictionary<string, object> { { "asteroid_name", asteroidToEditName }, { "time_elapsed", Time.timeSinceLevelLoad } });
+        this.asteroidCreator.SetupAsteroidCreator();
+
+        AnalyticsEvent.Custom("Asteroid_Creator_Opened", new Dictionary<string, object> { { "asteroid_name", AsteroidSelector.selectedAsteroid.asteroidName }, { "time_elapsed", Time.timeSinceLevelLoad } });
     }
 }
 

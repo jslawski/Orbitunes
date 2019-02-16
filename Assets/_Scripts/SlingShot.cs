@@ -38,7 +38,7 @@ public class SlingShot : MonoBehaviour
 
         StartCoroutine(this.UpdatePosition());
 
-        Color lineColor = AsteroidSelector.selectedAsteroid.GetComponentInChildren<ParticlePulse>().particleColor;
+        Color lineColor = AsteroidSelector.selectedAsteroid.asteroidColor;
         this.lineObject.startColor = lineColor;
         this.lineObject.endColor = lineColor;
     }

@@ -9,38 +9,22 @@ using UnityEngine.Analytics;
  * * */
 public static class AsteroidSelector {
 
-	public static Dictionary<string, GameObject> asteroidMasterDict;
-
-	public delegate void AsteroidSelected(string selectedAsteroidName);
+	public delegate void AsteroidSelected(int selectedAsteroidIndex);
 	public static event AsteroidSelected OnAsteroidSelected;
 
 	[HideInInspector]
-	public static GameObject selectedAsteroid;
-	[HideInInspector]
-	public static List<string> asteroidNames = new List<string> { "QuarterNote", "EighthNote", "SixteenthNote", "BassSixteenthNote" };
+	public static AsteroidTemplate selectedAsteroid;
 
 	// Use AsteroidSelector for initialization
 	public static void SetupAsteroidSelector () {
-		AsteroidSelector.LoadAsteroidMasterDict();
-		AsteroidSelector.SelectAsteroid("QuarterNote");
+		AsteroidSelector.SelectAsteroid(0);
 	}
 
-	private static void LoadAsteroidMasterDict()
+	public static void SelectAsteroid(int selectedAsteroidIndex)
 	{
-		AsteroidSelector.asteroidMasterDict = new Dictionary<string, GameObject>();
+		AsteroidSelector.selectedAsteroid = Resources.Load("AsteroidTemplates/Asteroid" + selectedAsteroidIndex) as AsteroidTemplate;
+		AsteroidSelector.OnAsteroidSelected(selectedAsteroidIndex);
 
-		foreach (string asteroidName in AsteroidSelector.asteroidNames)
-		{
-			GameObject asteroidPrefab = GameObject.Find(asteroidName);
-			AsteroidSelector.asteroidMasterDict.Add(asteroidName, asteroidPrefab);
-		}
-	}
-
-	public static void SelectAsteroid(string selectedAsteroidName)
-	{
-		AsteroidSelector.selectedAsteroid = AsteroidSelector.asteroidMasterDict[selectedAsteroidName];
-		AsteroidSelector.OnAsteroidSelected(selectedAsteroidName);
-
-        AnalyticsEvent.Custom("Asteroid_Selected", new Dictionary<string, object> { { "Asteroid_Name", selectedAsteroidName } });
+        AnalyticsEvent.Custom("Asteroid_Selected", new Dictionary<string, object> { { "Asteroid_Name", "Asteroid" + selectedAsteroidIndex } });
     }
 }

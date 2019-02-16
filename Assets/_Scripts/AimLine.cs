@@ -38,7 +38,7 @@ public class AimLine : MonoBehaviour {
 		this.aimLineRenderer.SetPosition(0, this.aimLineLaunchValues.startPoint);
 		this.aimLineRenderer.SetPosition(0, this.aimLineLaunchValues.startPoint);
 
-		Color lineColor = AsteroidSelector.selectedAsteroid.GetComponentInChildren<ParticlePulse>().particleColor;
+		Color lineColor = AsteroidSelector.selectedAsteroid.asteroidColor;
 		this.aimLineRenderer.startColor = lineColor;
 		this.aimLineRenderer.endColor = lineColor;
 	}
