@@ -11,9 +11,9 @@ public static class Metronome {
 	public static event MetronomeStep OnStep;
 
 	public static float stepsPerBeat = 4f;
-	private static float secondsBetweenSteps = 0f;
+	public static float secondsBetweenSteps = 0f;
 
-	private static float beatsPerMinute = 80f;
+	public static float beatsPerMinute = 80f;
 	public static float secondsBetweenBeats = 0f;
 
 	public static double nextBeatTime = 0;

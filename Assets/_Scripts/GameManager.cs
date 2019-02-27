@@ -24,9 +24,6 @@ public class GameManager : MonoBehaviour {
 			instance = this;
             AnalyticsEvent.Custom("Game_Loaded", new Dictionary<string, object> {});
         }
-
-        //StartCoroutine(this.LoadLevel());
-
     }
 
     private IEnumerator LoadLevel()
@@ -59,7 +56,7 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-    private void TogglePause()
+    public void TogglePause()
     {
         Metronome.metronomePaused = !Metronome.metronomePaused;
 
@@ -94,9 +91,11 @@ public class GameManager : MonoBehaviour {
 
 	public void OpenAsteroidCreator()
 	{
-		this.asteroidCreator.gameObject.SetActive(true);
+        StartCoroutine(this.LoadLevel());
 
-        this.asteroidCreator.SetupAsteroidCreator();
+        //this.asteroidCreator.gameObject.SetActive(true);
+
+        //this.asteroidCreator.SetupAsteroidCreator();
 
         AnalyticsEvent.Custom("Asteroid_Creator_Opened", new Dictionary<string, object> { { "asteroid_name", AsteroidSelector.selectedAsteroid.asteroidName }, { "time_elapsed", Time.timeSinceLevelLoad } });
     }

@@ -22,7 +22,9 @@ public class EditButton : MonoBehaviour {
 	{
         AsteroidSelector.SelectAsteroid(asteroidToEditIndex);
         GameManager.instance.OpenAsteroidCreator();
-		
+
+        GameManager.instance.TogglePause();
+
         AnalyticsEvent.Custom("Edit_Button_Clicked", new Dictionary<string, object> { { "Asteroid_Name", AsteroidSelector.selectedAsteroid.asteroidName } });
     }
 
