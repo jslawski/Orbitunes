@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class GameManager : MonoBehaviour {
 
@@ -17,12 +18,34 @@ public class GameManager : MonoBehaviour {
 	[SerializeField]
 	private AsteroidCreator asteroidCreator;
 
+    public List<Star> stars;
+
+    public AudioMixer audioMixer;
+    public Queue<AudioMixerGroup> availableAudioMixerGroups;
+
+    [HideInInspector]
+    public int audioMixerIndex = 1;
+
 	// Use this for initialization
 	void Awake () {
 		if (instance == null)
 		{
 			instance = this;
             AnalyticsEvent.Custom("Game_Loaded", new Dictionary<string, object> {});
+        }
+
+        //this.SetupAudioMixer();
+    }
+
+    private void SetupAudioMixer()
+    {
+        this.audioMixer = Resources.Load<AudioMixer>("StarEffects");
+        AudioMixerGroup[] groups = this.audioMixer.FindMatchingGroups("Master");
+        this.availableAudioMixerGroups = new Queue<AudioMixerGroup>();
+
+        for (int i = 1; i < groups.Length; i++)
+        {
+            this.availableAudioMixerGroups.Enqueue(groups[i]);
         }
     }
 
@@ -98,6 +121,21 @@ public class GameManager : MonoBehaviour {
         //this.asteroidCreator.SetupAsteroidCreator();
 
         AnalyticsEvent.Custom("Asteroid_Creator_Opened", new Dictionary<string, object> { { "asteroid_name", AsteroidSelector.selectedAsteroid.asteroidName }, { "time_elapsed", Time.timeSinceLevelLoad } });
+    }
+
+    public void Load1StarLevel()
+    {
+        SceneManager.LoadScene("OneStar");
+    }
+
+    public void Load2StarLevel()
+    {
+        SceneManager.LoadScene("TwoStars");
+    }
+
+    public void Load3StarLevel()
+    {
+        SceneManager.LoadScene("ThreeStars");
     }
 }
 

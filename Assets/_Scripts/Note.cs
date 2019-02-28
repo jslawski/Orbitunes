@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Audio;
 
 /* * * 
  * The Note class handles the behavior of any object that emits sound to the beat of the Metronome.  
@@ -20,9 +21,12 @@ public class Note : MonoBehaviour {
     private Phrase mainPhrase;
     private int audioSourceIndex = 0;
 
+    private Rigidbody objectRigidbody;
+
     private void Awake()
     {
         noteAudio = GetComponents<AudioSource>();
+        this.objectRigidbody = GetComponentInParent<Rigidbody>();
     }
 
     private void OnDestroy()
@@ -34,6 +38,9 @@ public class Note : MonoBehaviour {
 
         Metronome.OnStep -= this.PlayDynamicNote;
         Metronome.OnStep -= this.PlayStaticNote;
+
+        //Re-Add Audio Mixer group to the list of available ones 
+        //GameManager.instance.availableAudioMixerGroups.Enqueue(this.noteAudio[0].outputAudioMixerGroup);
     }
 
     public void SetupNote(ushort phraseNumber, int beatsPerPhrase, bool isDynamic)
@@ -54,9 +61,12 @@ public class Note : MonoBehaviour {
 
     public void AssignAudioClip(AudioClip clip)
     {
+        //AudioMixerGroup mixerGroup = GameManager.instance.availableAudioMixerGroups.Dequeue();
+            
         for (int i = 0; i < this.noteAudio.Length; i++)
         {
             this.noteAudio[i].clip = clip;
+            //this.noteAudio[i].outputAudioMixerGroup = mixerGroup;
         }
     }
 
@@ -67,9 +77,7 @@ public class Note : MonoBehaviour {
 
 	private void GetCurrentPitchIndex()
 	{
-		this.curDistanceFromStar = this.GetDistance(Vector2.zero, this.gameObject.transform.position);
-
-		this.curPitchIndex = Mathf.RoundToInt((this.curDistanceFromStar / this.maxDistanceFromStar) * (PitchManager.notesInScale - 1));
+        this.curPitchIndex = Mathf.RoundToInt((90f / this.objectRigidbody.velocity.magnitude));
 
         if (this.curPitchIndex > PitchManager.notesInScale - 1) 
 		{

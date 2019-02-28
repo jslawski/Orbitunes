@@ -96,4 +96,9 @@ public class PitchManager : MonoBehaviour {
 			}
 		}
 	}
+
+    public void SetLowPassValue(Vector3 asteroidPosition, Vector3 starPosition)
+    {
+
+    }
 }

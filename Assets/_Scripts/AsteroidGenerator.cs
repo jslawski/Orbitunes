@@ -79,5 +79,7 @@ public class AsteroidGenerator : MonoBehaviour
                 { "Launch_Magnitude", this.launchValues.rawMagnitude } });
 
         Metronome.OnStep -= this.LaunchAsteroid;
+
+        DestroyAsteroidGenerator();
     }
 }
