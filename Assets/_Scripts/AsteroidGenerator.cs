@@ -16,9 +16,6 @@ public class AsteroidGenerator : MonoBehaviour
     private AsteroidTemplate selectedAsteroidTemplate;
     private LaunchValues launchValues;
     private Phrase phrase;
-    private NoteParent currentNoteParent;
-
-    private bool initialAsteroidGenerated = false;
 
     public void SetupAsteroidGenerator(LaunchValues launchValues)
     {
@@ -47,31 +44,22 @@ public class AsteroidGenerator : MonoBehaviour
         newAsteroid.SetupAsteroid(this.launchValues);
     }
 
-    private void SetupNoteParent(GameObject asteroid)
+    private void SetupNote(GameObject asteroid)
     {
-        GameObject newNoteParentObject = GameObject.Instantiate(this.noteParentPrefab, this.transform.position, new Quaternion()) as GameObject;
+        Note newNote = asteroid.GetComponentInChildren<Note>();
 
-        this.currentNoteParent = newNoteParentObject.GetComponent<NoteParent>();
-        Note asteroidNote = asteroid.GetComponentInChildren<Note>();
-        asteroidNote.noteAudio.clip = this.selectedAsteroidTemplate.asteroidAudio;
+        newNote.AssignAudioClip(AsteroidSelector.selectedAsteroid.asteroidAudio);
 
-        this.currentNoteParent.SetupNoteParent(asteroidNote, this.selectedAsteroidTemplate.phraseNumber, this.selectedAsteroidTemplate.beatsPerPhrase, this.selectedAsteroidTemplate.isDynamic);
-    }
-
-    private void AddNoteToNoteParent(GameObject asteroid)
-    {
-        Note asteroidNote = asteroid.GetComponentInChildren<Note>();
-        asteroidNote.noteAudio.clip = this.selectedAsteroidTemplate.asteroidAudio;
-
-        this.currentNoteParent.AddNoteToList(asteroidNote);
-        asteroid.transform.parent = this.currentNoteParent.transform;
+        newNote.SetupNote(this.selectedAsteroidTemplate.phraseNumber, this.selectedAsteroidTemplate.beatsPerPhrase, this.selectedAsteroidTemplate.isDynamic);
     }
 
 	private void SetupParticlePulse(GameObject asteroid)
 	{
 		ParticlePulse particlePulse = asteroid.GetComponentInChildren<ParticlePulse>();
         particlePulse.particleColor = this.selectedAsteroidTemplate.asteroidColor;
-		particlePulse.SetupParticlePulse(this.selectedAsteroidTemplate.beatsPerPhrase, this.phrase.currentStep);
+        GameObject trailObject = Instantiate(selectedAsteroidTemplate.asteroidTrail, asteroid.transform) as GameObject;
+
+		particlePulse.SetupParticlePulse(this.selectedAsteroidTemplate.phraseNumber, this.selectedAsteroidTemplate.beatsPerPhrase, trailObject.GetComponent<ParticleSystem>());
 	}
 
 	private void DestroyAsteroidGenerator()
@@ -81,40 +69,15 @@ public class AsteroidGenerator : MonoBehaviour
 
 	public void LaunchAsteroid()
 	{
-		//Stop generating asteroids once the phrase is complete
-		if (this.phrase.currentStep >= (this.phrase.GetMaxStepCount() - 1))
-		{
-			Metronome.OnStep -= LaunchAsteroid;
-			Destroy(this.gameObject);
-		}
+		GameObject asteroidObject = GameObject.Instantiate(this.baseAsteroidPrefab, this.launchValues.startPoint, new Quaternion()) as GameObject;
+	    this.SetupAsteroid(asteroidObject);
+        this.SetupNote(asteroidObject);
+        this.SetupParticlePulse(asteroidObject);
 
-		if (this.phrase.ShouldPlayAtStep() == true)
-		{
-			GameObject asteroidObject = GameObject.Instantiate(this.baseAsteroidPrefab, this.launchValues.startPoint, new Quaternion()) as GameObject;
-			this.SetupAsteroid(asteroidObject);
+        AnalyticsEvent.Custom("Asteroid_Launched", new Dictionary<string, object> { { "Asteroid_Name", this.selectedAsteroidTemplate.asteroidName }, { "Phrase_Number", this.phrase.phraseNumber },
+                { "Launch_Start_Point", this.launchValues.startPoint }, { "Launch_End_Point", this.launchValues.endPoint }, { "Launch_Direction", this.launchValues.curDirection },
+                { "Launch_Magnitude", this.launchValues.rawMagnitude } });
 
-            //Only setup a note for the initial asteroid
-            if (this.initialAsteroidGenerated == false)
-            {
-                this.SetupNoteParent(asteroidObject);
-                asteroidObject.transform.parent = this.currentNoteParent.transform;
-
-                this.initialAsteroidGenerated = true;
-
-                AnalyticsEvent.Custom("Asteroid_Launched", new Dictionary<string, object> { { "Asteroid_Name", this.selectedAsteroidTemplate.asteroidName }, { "Phrase_Number", this.phrase.phraseNumber },
-                    { "Launch_Start_Point", this.launchValues.startPoint }, { "Launch_End_Point", this.launchValues.endPoint }, { "Launch_Direction", this.launchValues.curDirection },
-                    { "Launch_Magnitude", this.launchValues.rawMagnitude } });
-            }
-            else
-            {
-                this.AddNoteToNoteParent(asteroidObject);
-            }
-            
-			this.SetupParticlePulse(asteroidObject);
-		}
-
-		this.phrase.IncrementStep();
-
-        
+        Metronome.OnStep -= this.LaunchAsteroid;
     }
 }

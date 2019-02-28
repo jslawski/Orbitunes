@@ -8,6 +8,7 @@ public class AsteroidTemplate : ScriptableObject
 	public string asteroidName;
     public AudioClip asteroidAudio;
     public Color asteroidColor;
+    public GameObject asteroidTrail;
 
     public ushort phraseNumber;
     public int beatsPerPhrase;
