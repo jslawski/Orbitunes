@@ -77,6 +77,12 @@ public class Note : MonoBehaviour {
 
 	private void GetCurrentPitchIndex()
 	{
+        if (this.objectRigidbody.velocity.magnitude == 0f)
+        {
+            this.curPitchIndex = PitchManager.notesInScale - 1;
+            return;
+        }
+
         this.curPitchIndex = Mathf.RoundToInt((90f / this.objectRigidbody.velocity.magnitude));
 
         if (this.curPitchIndex > PitchManager.notesInScale - 1) 

@@ -49,11 +49,18 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private IEnumerator LoadLevel()
+    private IEnumerator LoadAsteroidCreator()
     {
         SceneManager.LoadScene("AsteroidCreator", LoadSceneMode.Additive);
         yield return null;
         SceneManager.SetActiveScene(SceneManager.GetSceneByName("AsteroidCreator"));
+    }
+
+    private IEnumerator LoadTutorialScene()
+    {
+        SceneManager.LoadScene("TutorialScene", LoadSceneMode.Additive);
+        yield return null;
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("TutorialScene"));
     }
 
     void Start()
@@ -78,6 +85,24 @@ public class GameManager : MonoBehaviour {
 			Application.Quit();
 		}
 	}
+
+    public bool IsClickingAStar()
+    {
+        for (int i = 0; i < this.stars.Count; i++)
+        {
+            Vector3 mousePositionWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            float xDiff = Mathf.Abs(mousePositionWorld.x - this.stars[i].starTransform.position.x);
+            float yDiff = Mathf.Abs(mousePositionWorld.y - this.stars[i].starTransform.position.y);
+
+            if (xDiff <= this.stars[i].starCollider.radius && yDiff <= this.stars[i].starCollider.radius)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     public void TogglePause()
     {
@@ -114,13 +139,22 @@ public class GameManager : MonoBehaviour {
 
 	public void OpenAsteroidCreator()
 	{
-        StartCoroutine(this.LoadLevel());
-
-        //this.asteroidCreator.gameObject.SetActive(true);
-
-        //this.asteroidCreator.SetupAsteroidCreator();
+        StartCoroutine(this.LoadAsteroidCreator());
 
         AnalyticsEvent.Custom("Asteroid_Creator_Opened", new Dictionary<string, object> { { "asteroid_name", AsteroidSelector.selectedAsteroid.asteroidName }, { "time_elapsed", Time.timeSinceLevelLoad } });
+    }
+
+    public void OpenTutorialScene()
+    {
+        this.TogglePause();
+
+        StartCoroutine(this.LoadTutorialScene());
+    }
+
+    public void CloseTutorialScene()
+    {
+        SceneManager.UnloadSceneAsync("TutorialScene");
+        GameManager.instance.TogglePause();
     }
 
     public void Load1StarLevel()

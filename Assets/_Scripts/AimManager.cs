@@ -6,12 +6,7 @@ public class AimManager : MonoBehaviour, IPointerDownHandler
 
 	public static AimManager instance;
 
-	public delegate void LaunchAreaClicked();
-	public static event LaunchAreaClicked OnLaunchAreaClicked;
-
-	private GameObject aimLinePrefab;
 	private GameObject asteroidGeneratorPrefab;
-	private AimLine aimLine;
     private GameObject slingShotPrefab;
 
 	private void Awake()
@@ -24,19 +19,16 @@ public class AimManager : MonoBehaviour, IPointerDownHandler
 
 	private void Start()
 	{
-		this.aimLinePrefab =  Resources.Load("AimLine") as GameObject;
         this.slingShotPrefab = Resources.Load("SlingShot") as GameObject;
 		this.asteroidGeneratorPrefab = Resources.Load("AsteroidGenerator") as GameObject;
 	}
 
 	public void OnPointerDown(PointerEventData data)
 	{
-        if (AimManager.OnLaunchAreaClicked != null)
+        if (GameManager.instance.IsClickingAStar() == true)
         {
-            AimManager.OnLaunchAreaClicked();
+            return;
         }
-
-        //this.InstantiateAimLine();
 
         this.InstantiateSlingShot();
 	}
@@ -48,15 +40,6 @@ public class AimManager : MonoBehaviour, IPointerDownHandler
         SlingShot slingShot = currentSlingShot.GetComponent<SlingShot>();
         slingShot.OnSlingShotReleased += CreateAsteroidGenerator;
     }
-
-	private void InstantiateAimLine()
-	{
-		Vector2 instantiationPoint = GameManager.instance.mainCamera.ScreenToWorldPoint(Input.mousePosition);
-		GameObject currentAimLine = Instantiate(this.aimLinePrefab, instantiationPoint, new Quaternion()) as GameObject;
-		this.aimLine = currentAimLine.GetComponent<AimLine>();
-		this.aimLine.OnAimLineReleased += CreateAsteroidGenerator;
-		this.aimLine.SetupAimLine();
-	}
 
 	private void CreateAsteroidGenerator(LaunchValues launchValues)
 	{

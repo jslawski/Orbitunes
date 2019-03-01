@@ -10,7 +10,6 @@ using UnityEngine.Analytics;
  * * */
 public class AsteroidGenerator : MonoBehaviour
 {
-    public GameObject noteParentPrefab;
     public GameObject baseAsteroidPrefab;
 
     private AsteroidTemplate selectedAsteroidTemplate;
