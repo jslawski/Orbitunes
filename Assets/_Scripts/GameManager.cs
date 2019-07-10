@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Analytics;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 
@@ -17,6 +18,9 @@ public class GameManager : MonoBehaviour {
 
 	[SerializeField]
 	private AsteroidCreator asteroidCreator;
+
+    [SerializeField]
+    private Slider tempoSlider;
 
     public List<Star> stars;
 
@@ -70,7 +74,9 @@ public class GameManager : MonoBehaviour {
 
 	void Update() 
 	{
-		if(Input.GetKeyDown(KeyCode.P))
+        Metronome.UpdateMetronomeTempo(this.tempoSlider.value);
+
+        if (Input.GetKeyDown(KeyCode.P))
 		{
 			Debug.Break();
 		}
@@ -159,16 +165,19 @@ public class GameManager : MonoBehaviour {
 
     public void Load1StarLevel()
     {
+        this.RestartGame();
         SceneManager.LoadScene("OneStar");
     }
 
     public void Load2StarLevel()
     {
+        this.RestartGame();
         SceneManager.LoadScene("TwoStars");
     }
 
     public void Load3StarLevel()
     {
+        this.RestartGame();
         SceneManager.LoadScene("ThreeStars");
     }
 }

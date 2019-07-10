@@ -31,6 +31,8 @@ public class Note : MonoBehaviour {
 
     private void OnDestroy()
     {
+        PitchManager.instance.RemoveNote(this);
+
         if (this.OnNoteDestroyed != null)
         {
             this.OnNoteDestroyed(this);
@@ -103,7 +105,8 @@ public class Note : MonoBehaviour {
         {
             this.GetCurrentPitchIndex();
 
-            this.noteAudio[this.audioSourceIndex].pitch = PitchManager.instance.cMajorScale[this.curPitchIndex];
+            this.noteAudio[this.audioSourceIndex].pitch = PitchManager.instance.currentScale[this.curPitchIndex];
+            this.noteAudio[this.audioSourceIndex].volume = PitchManager.instance.GetVolume(this);
             this.noteAudio[this.audioSourceIndex].PlayScheduled(Metronome.nextBeatTime);
             this.audioSourceIndex = (this.audioSourceIndex + 1) % this.noteAudio.Length;
         }

@@ -81,10 +81,11 @@ public class Asteroid : MonoBehaviour {
 		}
 	}
 
+    //There is a little wiggle-room to this, to sort of extend the playing feel beyond the visual bounds
 	private bool IsWithinViewport()
 	{
 		Vector3 viewportPosition = GameManager.instance.mainCamera.WorldToViewportPoint(this.gameObject.transform.position);
-		return ((viewportPosition.x > 0) && (viewportPosition.x < 1) && (viewportPosition.y > 0) && (viewportPosition.y < 1));
+		return ((viewportPosition.x > -0.1f) && (viewportPosition.x < 1.1f) && (viewportPosition.y > -0.1f) && (viewportPosition.y < 1.1f));
 	}
 
 	private void OnDestroy()

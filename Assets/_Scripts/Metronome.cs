@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 /* * *
  * The backbone of the entire game.  The metronome's only job should be to reliably time.
@@ -55,4 +54,11 @@ public static class Metronome {
 			yield return null;
 		}
 	}
+
+    public static void UpdateMetronomeTempo(float newBeatsPerMinute)
+    {
+        Metronome.beatsPerMinute = newBeatsPerMinute;
+        Metronome.secondsBetweenBeats = 60.0f / Metronome.beatsPerMinute;
+        Metronome.secondsBetweenSteps = Metronome.secondsBetweenBeats / Metronome.stepsPerBeat;
+    }
 }

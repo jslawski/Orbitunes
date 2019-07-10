@@ -46,13 +46,14 @@ public class AsteroidGenerator : MonoBehaviour
     private void SetupNote(GameObject asteroid)
     {
         Note newNote = asteroid.GetComponentInChildren<Note>();
+        PitchManager.instance.AddNote(newNote);
 
         newNote.AssignAudioClip(AsteroidSelector.selectedAsteroid.asteroidAudio);
 
         newNote.SetupNote(this.selectedAsteroidTemplate.phraseNumber, this.selectedAsteroidTemplate.beatsPerPhrase, this.selectedAsteroidTemplate.isDynamic);
     }
 
-	private void SetupParticlePulse(GameObject asteroid)
+    private void SetupParticlePulse(GameObject asteroid)
 	{
 		ParticlePulse particlePulse = asteroid.GetComponentInChildren<ParticlePulse>();
         particlePulse.particleColor = this.selectedAsteroidTemplate.asteroidColor;
