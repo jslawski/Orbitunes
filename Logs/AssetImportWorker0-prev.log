@@ -1,0 +1,284 @@
+Using pre-set license
+Built from '2020.2/release' branch; Version is '2020.2.1f1 (270dd8c3da1c) revision 2559448'; Using compiler version '192528614'; Build Type 'Release'
+OS: 'Windows 10  (10.0.0) 64bit' Language: 'en' Physical Memory: 16305 MB
+BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
+
+ COMMAND LINE ARGUMENTS:
+C:\Program Files\Unity\Hub\Editor\2020.2.1f1\Editor\Unity.exe
+-adb2
+-batchMode
+-noUpm
+-name
+AssetImportWorker0
+-projectPath
+C:/Users/jslawski/Documents/Unity Projects/Orbitunes
+-logFile
+Logs/AssetImportWorker0.log
+-srvPort
+62983
+Successfully changed project path to: C:/Users/jslawski/Documents/Unity Projects/Orbitunes
+C:/Users/jslawski/Documents/Unity Projects/Orbitunes
+Using Asset Import Pipeline V2.
+Refreshing native plugins compatible for Editor in 29.49 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Initialize engine version: 2020.2.1f1 (270dd8c3da1c)
+[Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.2.1f1/Editor/Data/Resources/UnitySubsystems
+[Subsystems] Discovering subsystems at path C:/Users/jslawski/Documents/Unity Projects/Orbitunes/Assets
+GfxDevice: creating device client; threaded=0
+Direct3D:
+    Version:  Direct3D 11.0 [level 11.1]
+    Renderer: NVIDIA GeForce GTX 1080 Ti (ID=0x1b06)
+    Vendor:   
+    VRAM:     11127 MB
+    Driver:   27.21.14.5671
+Initialize mono
+Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.2.1f1/Editor/Data/Managed'
+Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.2.1f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
+Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.2.1f1/Editor/Data/MonoBleedingEdge/etc'
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56584
+Begin MonoManager ReloadAssembly
+Registering precompiled unity dll's ...
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.1f1/Editor/Data/PlaybackEngines/WebGLSupport/UnityEditor.WebGL.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.1f1/Editor/Data/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.1f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
+Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.2.1f1/Editor/Data/PlaybackEngines/LinuxStandaloneSupport/UnityEditor.LinuxStandalone.Extensions.dll
+Registered in 0.002047 seconds.
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 25.37 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.842 seconds
+Platform modules already initialized, skipping
+Registering precompiled user dll's ...
+Registered in 0.001441 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.33 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.619 seconds
+Platform modules already initialized, skipping
+========================================================================
+Worker process is ready to serve import requests
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.03 seconds
+Refreshing native plugins compatible for Editor in 0.35 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1410 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 68.2 MB.
+System memory in use after: 68.3 MB.
+
+Unloading 33 unused Assets to reduce memory usage. Loaded Objects now: 1847.
+Total: 1.559800 ms (FindLiveObjects: 0.154600 ms CreateObjectMapping: 0.046300 ms MarkObjects: 1.318300 ms  DeleteObjects: 0.039500 ms)
+
+========================================================================
+Received Import Request.
+  path: Assets/CNotes/bass.wav
+  artifactKey: Guid(4656338112128dd47904bc3446dad5b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/CNotes/bass.wav using Guid(4656338112128dd47904bc3446dad5b8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b9542b5ec6f6123dc90de1c03655440f') in 0.071922 seconds
+  Import took 0.073702 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 7.359732 seconds.
+  path: Assets/Resources/AsteroidTemplates
+  artifactKey: Guid(117097e7abb44554fbf85f20dfed712f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AsteroidTemplates using Guid(117097e7abb44554fbf85f20dfed712f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b64450300bcf3af7dd54bddd04e7fd4a') in 0.005327 seconds
+  Import took 0.007260 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.326711 seconds.
+  path: Assets/Resources/AsteroidTemplates/Asteroid0.asset
+  artifactKey: Guid(eeb3d1fb60868a64290f7add4712645e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AsteroidTemplates/Asteroid0.asset using Guid(eeb3d1fb60868a64290f7add4712645e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b41ce6aaf0f45eabae7d0b25ef697485') in 0.009827 seconds
+  Import took 0.011857 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.538895 seconds.
+  path: Assets/Resources/AsteroidTemplates/Asteroid1.asset
+  artifactKey: Guid(01bb459238e77f446b1a732185e202a6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AsteroidTemplates/Asteroid1.asset using Guid(01bb459238e77f446b1a732185e202a6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dda8fce1c35bdc665a152e0daa645b51') in 0.006260 seconds
+  Import took 0.008219 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000936 seconds.
+  path: Assets/Resources/AsteroidTemplates/Asteroid1.asset
+  artifactKey: Guid(01bb459238e77f446b1a732185e202a6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AsteroidTemplates/Asteroid1.asset using Guid(01bb459238e77f446b1a732185e202a6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dda8fce1c35bdc665a152e0daa645b51') in 0.002753 seconds
+  Import took 0.004679 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.769497 seconds.
+  path: Assets/Resources/AsteroidTemplates/Asteroid2.asset
+  artifactKey: Guid(5ac4c85a8ba59d54abb73042f759b707) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AsteroidTemplates/Asteroid2.asset using Guid(5ac4c85a8ba59d54abb73042f759b707) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8ec1ba1d49dcf9979d4de754963d64d7') in 0.006691 seconds
+  Import took 0.008734 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000640 seconds.
+  path: Assets/Resources/AsteroidTemplates/Asteroid2.asset
+  artifactKey: Guid(5ac4c85a8ba59d54abb73042f759b707) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AsteroidTemplates/Asteroid2.asset using Guid(5ac4c85a8ba59d54abb73042f759b707) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8ec1ba1d49dcf9979d4de754963d64d7') in 0.002810 seconds
+  Import took 0.004720 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.364705 seconds.
+  path: Assets/Resources/AsteroidTemplates/Asteroid3.asset
+  artifactKey: Guid(7d2816d16a6d88a49b12d056c6a00b35) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Resources/AsteroidTemplates/Asteroid3.asset using Guid(7d2816d16a6d88a49b12d056c6a00b35) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '924a35ef18ba160e88bc0f3620560ead') in 0.006315 seconds
+  Import took 0.008310 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 11.200716 seconds.
+  path: Assets/NewNotes
+  artifactKey: Guid(8f28abf6557d73942af0bbf9fb5f80b1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes using Guid(8f28abf6557d73942af0bbf9fb5f80b1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '31431d01ccffe27037547683f12b397a') in 0.005695 seconds
+  Import took 0.007891 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.293711 seconds.
+  path: Assets/NewNotes/bassnote.wav
+  artifactKey: Guid(81adc28b58ee4d84486ff377aade8ee7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes/bassnote.wav using Guid(81adc28b58ee4d84486ff377aade8ee7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'af8459894f674197d85d0d9f3696e7b2') in 0.011423 seconds
+  Import took 0.013340 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.001640 seconds.
+  path: Assets/NewNotes/bassnote.wav
+  artifactKey: Guid(81adc28b58ee4d84486ff377aade8ee7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes/bassnote.wav using Guid(81adc28b58ee4d84486ff377aade8ee7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'af8459894f674197d85d0d9f3696e7b2') in 0.007448 seconds
+  Import took 0.009344 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.724217 seconds.
+  path: Assets/NewNotes/ebass.wav
+  artifactKey: Guid(5d9104e5d0308b74c9ce655982fdf081) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes/ebass.wav using Guid(5d9104e5d0308b74c9ce655982fdf081) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cdab0210701079d63b238b99761bf29b') in 0.010169 seconds
+  Import took 0.012105 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000615 seconds.
+  path: Assets/NewNotes/ebass.wav
+  artifactKey: Guid(5d9104e5d0308b74c9ce655982fdf081) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes/ebass.wav using Guid(5d9104e5d0308b74c9ce655982fdf081) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cdab0210701079d63b238b99761bf29b') in 0.004714 seconds
+  Import took 0.006511 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 6.816918 seconds.
+  path: Assets/NewNotes/tear.wav
+  artifactKey: Guid(b93536c90c19e6f4cab79fef3666c782) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes/tear.wav using Guid(b93536c90c19e6f4cab79fef3666c782) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f2fd67cb33c961929b242f92bf82ad6e') in 0.008531 seconds
+  Import took 0.010517 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000354 seconds.
+  path: Assets/NewNotes/tear.wav
+  artifactKey: Guid(b93536c90c19e6f4cab79fef3666c782) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes/tear.wav using Guid(b93536c90c19e6f4cab79fef3666c782) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f2fd67cb33c961929b242f92bf82ad6e') in 0.005300 seconds
+  Import took 0.007096 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 26.380772 seconds.
+  path: Assets/NewNotes/bell.wav
+  artifactKey: Guid(6e25f16bdf152754089d387c296cb893) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes/bell.wav using Guid(6e25f16bdf152754089d387c296cb893) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1a104584f0fd27209da986a02a78396f') in 0.008465 seconds
+  Import took 0.010391 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.249735 seconds.
+  path: Assets/NewNotes/bell.wav
+  artifactKey: Guid(6e25f16bdf152754089d387c296cb893) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes/bell.wav using Guid(6e25f16bdf152754089d387c296cb893) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9b989858fec3b13d4d79520bf6a3a8ac') in 0.004896 seconds
+  Import took 0.006847 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.001391 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for LinuxStandalone target not found
+Native extension for WindowsStandalone target not found
+Native extension for OSXStandalone target not found
+Native extension for WebGL target not found
+Refreshing native plugins compatible for Editor in 0.35 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.631 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.35 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1403 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 70.8 MB.
+System memory in use after: 70.9 MB.
+
+Unloading 24 unused Assets to reduce memory usage. Loaded Objects now: 1858.
+Total: 1.830900 ms (FindLiveObjects: 0.429700 ms CreateObjectMapping: 0.092800 ms MarkObjects: 1.290000 ms  DeleteObjects: 0.016800 ms)
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 4.16 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 23 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 43.7 MB.
+System memory in use after: 43.8 MB.
+
+Unloading 22 unused Assets to reduce memory usage. Loaded Objects now: 1858.
+Total: 1.324500 ms (FindLiveObjects: 0.142400 ms CreateObjectMapping: 0.041800 ms MarkObjects: 1.127100 ms  DeleteObjects: 0.012100 ms)
+
+========================================================================
+Received Import Request.
+  Time since last request: 129.928680 seconds.
+  path: Assets/NewNotes/bell.wav
+  artifactKey: Guid(6e25f16bdf152754089d387c296cb893) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes/bell.wav using Guid(6e25f16bdf152754089d387c296cb893) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8aa22929296bf961a75f1f594e510a39') in 0.027452 seconds
+  Import took 0.029414 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.004347 seconds.
+  path: Assets/NewNotes/bell.wav
+  artifactKey: Guid(6e25f16bdf152754089d387c296cb893) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/NewNotes/bell.wav using Guid(6e25f16bdf152754089d387c296cb893) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8aa22929296bf961a75f1f594e510a39') in 0.004385 seconds
+  Import took 0.006480 seconds .
+
+========================================================================
+Received Prepare
+Refreshing native plugins compatible for Editor in 4.14 ms, found 0 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 23 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 43.8 MB.
+System memory in use after: 43.9 MB.
+
+Unloading 22 unused Assets to reduce memory usage. Loaded Objects now: 1859.
+Total: 1.770400 ms (FindLiveObjects: 0.138200 ms CreateObjectMapping: 0.042800 ms MarkObjects: 1.575300 ms  DeleteObjects: 0.013200 ms)
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file

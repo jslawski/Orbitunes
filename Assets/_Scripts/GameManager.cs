@@ -152,6 +152,11 @@ public class GameManager : MonoBehaviour {
 
     public void OpenTutorialScene()
     {
+        if (Metronome.metronomeStarted == false)
+        {
+            return;
+        }
+
         this.TogglePause();
 
         StartCoroutine(this.LoadTutorialScene());
