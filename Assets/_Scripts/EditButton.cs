@@ -20,6 +20,11 @@ public class EditButton : MonoBehaviour {
 
 	public void LaunchEdit()
 	{
+        if (Metronome.metronomeStarted == false)
+        {
+            return;
+        }
+
         AsteroidSelector.SelectAsteroid(asteroidToEditIndex);
         GameManager.instance.OpenAsteroidCreator();
 
